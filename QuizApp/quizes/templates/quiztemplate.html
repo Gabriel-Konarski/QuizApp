@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+</head>
+<body>
+   <h1>{{ quiz.name }}</h1>
+   <h2>{{ quiz.category }}</h2>
+
+    <div>
+        {% for quest in question %}
+            <p>{{ quest }}</p>
+            <form action="" method="POST">
+            {% csrf_token %}
+
+            {% for ans in answers %}
+                {% for a in ans %}
+                    {% if a.question == quest %}
+
+                            <input type="radio" name="{{quest.id}}" value="{{ a }}">
+                            <label>{{ a }}</label>
+                    {% endif %}
+            {% endfor %}
+            {% endfor %}
+            </form>
+        {% endfor %}
+        <input type="submit">
+    </div>
+</body>
+</html>
