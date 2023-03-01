@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+<h1>REGISTER</h1>
+<form action="" method="POST"> {% csrf_token %}
+  {{form.as_p}}
+  <button type="submit">Submit</button>
+</form>
+
+{% endblock %}

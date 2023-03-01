@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+<h1>Login</h1>
+<form action="" method="POST">{% csrf_token %}
+        <label>Username</label>
+        <input name="username" type="text" placeholder="Enter a username" required>
+
+        <label>Password</label>
+        <input name="password" type="password" placeholder="Enter a password" required>
+
+        <button type="submit">Submit</button>
+</form>
+{% endblock %}
