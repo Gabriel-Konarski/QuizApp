@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>points</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
   <p>Score {{points}}/{{max_points}}</p>
   {% if points == max_points %}
   <p>Max Score! :)</p>
   {% endif %}
-</body>
-</html>
+
+{% endblock %}
