@@ -3,8 +3,9 @@
 
 {% block content %}
 
-   <h1>{{ quiz.name }}</h1>
-   <h2>{{ quiz.category }}</h2>
+   <h1>Name: {{ quiz.name }}</h1>
+   <h5>Category: {{ quiz.category }}</h5>
+   <h5>Created by: {{ quiz.author }}</h5>
 
     <div>
         <form action="" method="POST">{% csrf_token %}
