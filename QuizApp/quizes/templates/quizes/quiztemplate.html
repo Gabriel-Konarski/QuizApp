@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Quiz</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
    <h1>{{ quiz.name }}</h1>
    <h2>{{ quiz.category }}</h2>
 
@@ -21,8 +19,8 @@
                     {% endfor %}
                 {% endfor %}
             {% endfor %}
-        <input type="submit">
+        <input type="submit" class="btn btn-primary">
        </form>
     </div>
-</body>
-</html>
+
+{% endblock %}

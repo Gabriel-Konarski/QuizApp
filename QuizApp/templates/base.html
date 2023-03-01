@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load django_bootstrap5 %}
+
+    {% bootstrap_css %}
+
+    {% bootstrap_javascript %}
+
+    {% bootstrap_messages %}
+    <title>Test</title>
+
+</head>
+<body>
+    <div class="container">
+    {% include 'header.html' %}
+
+    {% block content %}
+
+    {% endblock content %}
+
+    {% include 'footer.html' %}
+    </div>
+</body>
+</html>
