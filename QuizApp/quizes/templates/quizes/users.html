@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<table class="table table-dark table-striped">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody>
+     {% for i in users %}
+         <tr>
+            <td>{{ i.username }}</td>
+            <td>{{ i.email }}</td>
+         </tr>
+     {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}

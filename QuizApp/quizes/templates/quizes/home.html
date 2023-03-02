@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <h5>Best Users!</h5>
+        <hr>
+        <div class="card card-body">
+            <a class="btn btn-primary btn-sm btn-block" href="{% url 'users' %}">Show Users
+            </a>
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+
+                        <th>User</th>
+                        <th>Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     {% for i in users %}
+                         <tr>
+
+                            <td>{{ i.username }}</td>
+                            <td>{{ i.email }}</td>
+                         </tr>
+                     {% endfor %}
+  </tbody>
+
+            </table>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <h5>Recently created</h5>
+        <hr>
+        <div class="card card-body">
+            <a class="btn btn-primary btn-sm btn-block" href="">Create Quiz</a>
+            <table class="table table-sm">
+                <thead>
+                       <tr>
+                           <th>Name</th>
+                           <th>Category</th>
+                           <th>Added</th>
+                           <th>Modified</th>
+                           <th>Level</th>
+                       </tr>
+                </thead>
+
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

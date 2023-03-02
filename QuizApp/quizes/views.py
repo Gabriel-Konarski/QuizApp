@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Quiz, Question, Answer
-
+from .models import Quiz, Question, Answer, User
+from django.http import HttpResponse
 
 def quizView(request, pk):
     quizz = get_object_or_404(Quiz, id=pk)
@@ -27,3 +27,13 @@ def quizView(request, pk):
                 points += 1
 
         return render(request, 'quizes/points.html', {'points': points, 'max_points': max_points})
+
+def home(request):
+    users = User.objects.all().order_by('username').values()[:3]
+    context = {'users': users}
+    return render(request, 'quizes/home.html', context)
+
+def users(request):
+    users = User.objects.all()
+    context = {'users': users}
+    return render(request, 'quizes/users.html', context)
