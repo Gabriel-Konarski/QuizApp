@@ -21,8 +21,8 @@
                      {% for i in users %}
                          <tr>
 
-                            <td>{{ i.username }}</td>
-                            <td>{{ i.email }}</td>
+                            <td>{{ i.name }}</td>
+                            <td>{{ i.level }}</td>
                          </tr>
                      {% endfor %}
   </tbody>
@@ -39,8 +39,8 @@
             <table class="table table-sm">
                 <thead>
                        <tr>
-                           <th>Name</th>
                            <th>Category</th>
+                           <th>Name</th>
                            <th>Added</th>
                            <th>Modified</th>
                            <th>Level</th>
@@ -48,6 +48,15 @@
                 </thead>
 
                 <tbody>
+                    {% for i in quizes %}
+                        <tr>
+                            <td>{{ i.category }}</td>
+                            <td>{{ i.name }}</td>
+                            <td>{{ i.added }}</td>
+                            <td>{{ i.modified }}</td>
+                            <td>{{ i.level }}</td>
+                        </tr>
+                    {% endfor %}
 
                 </tbody>
             </table>
