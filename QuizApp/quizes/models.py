@@ -8,7 +8,6 @@ class Profile(models.Model):
     email = models.EmailField()
     level = models.IntegerField()
     progress = models.IntegerField()
-    quests = models.ManyToManyField('Quiz', blank=True)
 
     created = models.DateTimeField(auto_now_add=True)
 
@@ -16,10 +15,21 @@ class Profile(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.progress > 100:
+        if self.progress >= 100:
             self.level += 1
             self.progress -= 100
         super(Profile, self).save(*args, **kwargs)
+
+
+class DoneQuizes(models.Model):
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE)
+    points = models.IntegerField()
+
+    date_completed = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user}: {self.quiz}'
 
 
 class Category(models.Model):
