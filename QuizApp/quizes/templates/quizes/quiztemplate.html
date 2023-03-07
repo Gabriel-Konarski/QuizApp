@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
+{% block title %}{{ quiz.name }}{% endblock %}
+
 {% block content %}
 
    <h1>Name: {{ quiz.name }}</h1>

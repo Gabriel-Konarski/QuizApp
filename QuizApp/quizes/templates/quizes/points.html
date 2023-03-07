@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
+{% block title %}Score {{points}}/{{max_points}}{% endblock %}
+
 {% block content %}
 
   <p>Score {{points}}/{{max_points}}</p>
