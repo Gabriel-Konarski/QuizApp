@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
-{% block content %}
 
+{% block content %}
+    <h1>{{ category.name }}</h1>
     <table class="table table-dark table-hover">
   <thead>
     <tr>
@@ -15,7 +16,7 @@
   <tbody>
     {% for quiz in quizes %}
          <tr>
-             <td><a href="{% url 'quiz' quiz.id %}">{{ quiz.name }}</a></td>
+            <td><a href="{% url 'quiz' quiz.id %}">{{ quiz.name }}</a></td>
             <td>{{ quiz.author }}</td>
             <td>{{ quiz.added }}</td>
             <td>{{ quiz.level }}</td>
