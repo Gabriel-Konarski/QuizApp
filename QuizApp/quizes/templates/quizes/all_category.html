@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<table class="table table-dark table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Category</th>
+      <th scope="col">Name</th>
+      <th scope="col">Author</th>
+      <th scope="col">Added</th>
+      <th scope="col">Level</th>
+    </tr>
+  </thead>
+  <tbody>
+     {% for i in quizes_list %}
+         <tr>
+            <td>{{ i.category }}</td>
+            <td><a href="{% url 'quiz' i.id %}">{{ i.name }}</a></td>
+            <td>{{ i.author }}</td>
+            <td>{{ i.added }}</td>
+            <td>{{ i.level }}</td>
+         </tr>
+     {% endfor %}
+  </tbody>
+</table>
+<br/><br/>
+
+<hr><br/>
+    {% if quizes_list.has_previous %}
+        <a href="?page=1">&laquo First</a>
+        <a href="?page={{ quizes_list.previous_page_number }}">Previous</a>
+    {% endif %}
+    Page {{ quizes_list.number }} of {{ quizes_list.paginator.num_pages }}
+    {% if quizes_list.has_next %}
+        <a href="?page={{ quizes_list.next_page_number }}">Next page</a>
+        <a href="?page={{ quizes_list.paginator.num_pages }}">Last &raquo</a>
+    {% endif %}
+
+{% endblock %}

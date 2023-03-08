@@ -1,8 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Quiz, Question, Answer, Profile, User, Category
-from django.http import HttpResponse
-from .forms import QuizForm, QuestionForm
-from django.forms import inlineformset_factory
+from .filters import QuizFilter
+from django.core.paginator import Paginator
+
 
 def quizView(request, pk):
     quizz = get_object_or_404(Quiz, id=pk)
@@ -33,8 +33,10 @@ def quizView(request, pk):
 def home(request):
     category = Category.objects.all()
     users = Profile.objects.all().order_by('name').values()[:3]
-    quizes = Quiz.objects.all().order_by('-added').values()[:5]
-    context = {'users': users, 'quizes': quizes, 'category': category}
+    quizes = Quiz.objects.all().order_by('-added').values()[:3]
+    myFilter = QuizFilter(request.GET, queryset=quizes)
+    quizes = myFilter.qs
+    context = {'users': users, 'quizes': quizes, 'category': category, 'myFilter': myFilter}
     return render(request, 'quizes/home.html', context)
 
 def users(request):
@@ -42,39 +44,49 @@ def users(request):
     context = {'users': users}
     return render(request, 'quizes/users.html', context)
 
+
+def allcategory(request):
+    category = Category.objects.all()
+    quizes = Quiz.objects.all()
+    p = Paginator(quizes, 2)
+    page = request.GET.get('page')
+    quizes_list = p.get_page(page)
+    myFilter = QuizFilter(request.GET, queryset=quizes)
+    quizes = myFilter.qs
+    context = {'quizes_list': quizes_list, 'quizes': quizes, 'myFilter': myFilter, 'category': category}
+    return render(request, 'quizes/all_category.html', context)
+
+
+
 def categoryView(request, pk):
     category = Category.objects.get(id=pk)
     quizes = category.quiz_set.all()
-    context = {'category': category, 'quizes': quizes}
+    myFilter = QuizFilter(request.GET, queryset=quizes)
+    quizes = myFilter.qs
+    context = {'category': category, 'quizes': quizes, 'myFilter': myFilter}
     return render(request, 'quizes/category.html', context)
 
+
 def createquizView(request):
-    form = QuizForm()
-    if request.method == 'POST':
-        form = QuizForm(request.POST)
-        if form.is_valid():
-            form.save()
-    context = {'form': form}
-    return render(request, 'quizes/create_quiz.html', context)
+    if request.method == "GET":
+        categories = Category.objects.all()
+        levels =(1, 2, 3, 4, 5, 6)
+        return render(request, 'quizes/create_quiz.html', {'categories': categories, 'levels': levels})
 
-def createquestionView(request, pk):
-    QuestionFormSet = inlineformset_factory(Quiz, Question, fields=('content', 'quiz'), extra=4)
-    quiz = Quiz.objects.get(id=pk)
-    formset = QuestionFormSet(queryset=Question.objects.none(), instance=quiz)
-    if request.method == 'POST':
-        formset = QuestionFormSet(request.POST, instance=quiz)
-        if formset.is_valid():
-            formset.save()
-    context = {'formset': formset}
-    return render(request, 'quizes/create_question.html', context)
+    if request.method == "POST":
+        user = request.user
+        category = Category.objects.get(name=request.POST['quiz-category'])
+        profil = Profile.objects.get(user=user)
+        quiz = Quiz.objects.create(author=profil, category=category,
+                                   name=request.POST['quiz-name'],
+                                   description=request.POST['quiz-description'],
+                                   level=request.POST['quiz-level'])
+        question = Question.objects.create(quiz=quiz, content=request.POST['question'])
+        answer1 = Answer.objects.create(question=question, name=request.POST['answer1'], correct=False)
+        answer2 = Answer.objects.create(question=question, name=request.POST['answer2'], correct=False)
+        answer3 = Answer.objects.create(question=question, name=request.POST['answer3'], correct=False)
+        answer4 = Answer.objects.create(question=question, name=request.POST['answer4'], correct=False)
 
-def createanswerView(request,pk):
-    AnswerFormSet = inlineformset_factory(Question, Answer, fields=('name', 'question', 'correct'), extra=2)
-    question = Question.objects.get(id=pk)
-    formset = AnswerFormSet(instance=question)
-    if request.method == 'POST':
-        formset = AnswerFormSet(request.POST, instance=question)
-        if formset.is_valid():
-            formset.save()
-    context = {'formset': formset}
-    return render(request, 'quizes/create_answer.html', context)
+        return redirect('home')
+
+

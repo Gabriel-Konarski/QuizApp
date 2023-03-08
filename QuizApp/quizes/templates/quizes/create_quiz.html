@@ -3,8 +3,29 @@
 
 {% block content %}
     <form action="" method="POST">{% csrf_token %}
-        {{ form }}
+        <label for="quiz-category">Category</label>
+        <select name="quiz-category">
+            {% for category in categories %}
+                <option value="{{ category }}">{{ category }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="text" name="quiz-name" placeholder="Quiz name">
+        <textarea name="quiz-description"></textarea>
+
+            {% for level in levels %}
+                <input type="radio" name="quiz-level" value="{{ level }}" placeholder="Quiz-level">
+                <label>{{ level }}</label>
+            {% endfor %}
+        <input type="text" name="question" placeholder="Question">
+        <input type="text" name="answer1" placeholder="Answer">
+        <input type="text" name="answer2" placeholder="Answer">
+        <input type="text" name="answer3" placeholder="Answer">
+        <input type="text" name="answer4" placeholder="Answer">
+
+
         <input type="submit" name="Submit">
+
     </form>
 
 
