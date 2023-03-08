@@ -1,3 +1,5 @@
+{% load static %}
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
     <symbol id="header-logo" viewBox="0 0 250 40">
     <g transform="matrix(0.0777173,0,0,0.0777173,1.04851e-13,0)">
@@ -42,30 +44,48 @@
         </g>
     </g>
 </svg>
-<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-        <svg class="bi me-2" width="250" height="40"><use xlink:href="#header-logo"/></svg>
-    </a>
 
-    <ul class="nav nav-pills">
-        <li class="nav-item"><a href="#" class="nav-link active" aria-current="page">Home</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
-        <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
+<nav class="navbar navbar-static-top border-bottom navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a href="/" class="navbar-brand">
+            <svg class="bi me-2" width="250" height="40"><use xlink:href="#header-logo"/></svg>
+        </a>
+        <div class="d-flex">
+                <label class="switch" for="lightSwitch">
+                    <input type="checkbox" id="lightSwitch">
+                    <span class="slider">
+                        <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                        </svg>
+                    </span>
+                </label>
+            </div>
+            <script src="{% static 'js/switch.js' %}"></script>
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav ms-auto">
+                    <a href="{% url 'home' %}" class="nav-link {% if request.path == home %}active{% endif %}">Home</a>
+                    <a href="#" class="nav-link">Profile</a>
+                    <a href="#" class="nav-link">Messages</a>
+            </div>
+            {% if user.is_authenticated %}
+            <div class="navbar-nav dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ user.username }}
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Account</a>
+                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                </div>
+            </div>
 
-        {% if user.is_authenticated %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {{ user.username }}
-          </a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Account</a></li>
-            <li><a class="dropdown-item" href="#">Logout</a></li>
-          </ul>
-        </li>
+            {% else %}
+            <a href="{% url 'login' %}" class="nav-link {% if request.path == login %}active{% endif %}">Login</a>
 
-        {% else %}
-        <li class="nav-item"><a href="#" class="nav-link">Login</a></li>
+            {% endif %}
+
 
         {% endif %}
 
@@ -73,7 +93,8 @@
             <form method="get" action="{% url 'allcategory'  %}">
                 {{ myFilter.form }}
                 <button class="btn btn-outline-primary" type="submit">Search</button>
+
             </form>
-        </li>
-    </ul>
-</header>
+        </div>
+    </div>
+</nav>
