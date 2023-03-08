@@ -1,19 +1,33 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     name = models.CharField(max_length=32, null=True)
-    email = models.EmailField()
-    level = models.IntegerField()
-    progress = models.IntegerField()
+    level = models.IntegerField(default=1)
+    progress = models.IntegerField(default=0)
 
     created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.name
+        return str(self.user)
 
+    # Create profile when user is created
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+
+    # Save profile whenever user is saved
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.profile.save()
+
+    # Check if levelup is available
     def save(self, *args, **kwargs):
         if self.progress >= 100:
             self.level += 1
@@ -42,6 +56,7 @@ class Category(models.Model):
 class Quiz(models.Model):
     author = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    completed_num = models.IntegerField(null=True, default=0)
     name = models.CharField(max_length=100)
     description = models.TextField()
     added = models.DateTimeField(auto_now_add=True)
@@ -50,6 +65,7 @@ class Quiz(models.Model):
 
     def __str__(self):
         return self.name
+
 
 
 class Question(models.Model):

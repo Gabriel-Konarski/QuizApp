@@ -23,7 +23,6 @@ def quizView(request, pk):
         levelup_flag = False
         for quest in questionn:
             max_points += 1
-            print(quest.id)
             answer = get_object_or_404(Answer, id=data.get(str(quest.id)))
             if answer.correct:
                 pts += 1
@@ -55,6 +54,9 @@ def quizView(request, pk):
                     if profil.progress >= 100:
                         levelup_flag = True
                     profil.save()
+
+                    quizz.completed_num += 1
+                    quizz.save()
 
             else:
                 if check_done_quiz.points < points:
