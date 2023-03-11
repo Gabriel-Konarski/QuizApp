@@ -27,14 +27,15 @@
 <br/><br/>
 
 <hr><br/>
-    {% if quizes_list.has_previous %}
-        <a href="?page=1">&laquo First</a>
-        <a href="?page={{ quizes_list.previous_page_number }}">Previous</a>
-    {% endif %}
-    Page {{ quizes_list.number }} of {{ quizes_list.paginator.num_pages }}
-    {% if quizes_list.has_next %}
-        <a href="?page={{ quizes_list.next_page_number }}">Next page</a>
-        <a href="?page={{ quizes_list.paginator.num_pages }}">Last &raquo</a>
-    {% endif %}
+{% if quizes_list.has_previous %}
+    <a href="?{{ querystring }}&amp;page=1">&laquo; First</a>
+    <a href="?{{ querystring }}&amp;page={{ quizes_list.previous_page_number }}">Previous</a>
+{% endif %}
+Page {{ quizes_list.number }} of {{ quizes_list.paginator.num_pages }}
+{% if quizes_list.has_next %}
+    <a href="?{{ querystring }}&amp;page={{ quizes_list.next_page_number }}">Next</a>
+    <a href="?{{ querystring }}&amp;page={{ quizes_list.paginator.num_pages }}">Last &raquo;</a>
+{% endif %}
+
 
 {% endblock %}

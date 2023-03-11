@@ -4,6 +4,7 @@ from .filters import QuizFilter
 from django.core.paginator import Paginator
 
 
+
 def quizView(request, pk):
     quizz = get_object_or_404(Quiz, id=pk)
     questionn = Question.objects.filter(quiz=quizz.id)
@@ -95,12 +96,28 @@ def users(request):
 def allcategory(request):
     category = Category.objects.all()
     quizes = Quiz.objects.all()
+    myFilter = QuizFilter(request.GET, queryset=quizes)
+    if not myFilter.is_bound:
+        myFilter.form = myFilter.form.__class__(request.GET)
+    quizes = myFilter.qs
     p = Paginator(quizes, 2)
     page = request.GET.get('page')
     quizes_list = p.get_page(page)
-    myFilter = QuizFilter(request.GET, queryset=quizes)
-    quizes = myFilter.qs
-    context = {'quizes_list': quizes_list, 'quizes': quizes, 'myFilter': myFilter, 'category': category}
+    name = request.GET.get('name', '')
+    querystring = request.GET.copy()
+    if 'page' in querystring:
+        del querystring['page']
+    if name:
+        querystring['name'] = name
+
+    context = {
+        'quizes_list': quizes_list,
+        'myFilter': myFilter,
+        'quizes': quizes,
+        'category': category,
+        'name': name,
+        'querystring': querystring.urlencode()
+    }
     return render(request, 'quizes/all_category.html', context)
 
 
@@ -129,10 +146,28 @@ def createquizView(request):
                                    description=request.POST['quiz-description'],
                                    level=request.POST['quiz-level'])
         question = Question.objects.create(quiz=quiz, content=request.POST['question'])
-        answer1 = Answer.objects.create(question=question, name=request.POST['answer1'], correct=False)
-        answer2 = Answer.objects.create(question=question, name=request.POST['answer2'], correct=False)
-        answer3 = Answer.objects.create(question=question, name=request.POST['answer3'], correct=False)
-        answer4 = Answer.objects.create(question=question, name=request.POST['answer4'], correct=False)
+        answer1 = Answer.objects.create(question=question, name=request.POST['answer1'], correct=request.POST.get('correct_answer') == '1')
+        answer2 = Answer.objects.create(question=question, name=request.POST['answer2'], correct=request.POST.get('correct_answer') == '2')
+        answer3 = Answer.objects.create(question=question, name=request.POST['answer3'], correct=request.POST.get('correct_answer') == '3')
+        answer4 = Answer.objects.create(question=question, name=request.POST['answer4'], correct=request.POST.get('correct_answer') == '4')
 
-        return redirect('home')
+        return redirect('add_question', pk=quiz.id)
+
+
+def add_question(request, pk):
+    quiz = Quiz.objects.get(id=pk)
+    if request.method == "GET":
+        context = {'quiz': quiz}
+        return render(request, 'quizes/add_question.html', context)
+
+    if request.method == "POST":
+        question = Question.objects.create(quiz=quiz, content=request.POST['question'])
+        answer1 = Answer.objects.create(question=question, name=request.POST['answer1'], correct=request.POST.get('correct_answer') == '1')
+        answer2 = Answer.objects.create(question=question, name=request.POST['answer2'], correct=request.POST.get('correct_answer') == '2')
+        answer3 = Answer.objects.create(question=question, name=request.POST['answer3'], correct=request.POST.get('correct_answer') == '3')
+        answer4 = Answer.objects.create(question=question, name=request.POST['answer4'], correct=request.POST.get('correct_answer') == '4')
+
+        return redirect('add_question', pk=quiz.id)
+
+
 
