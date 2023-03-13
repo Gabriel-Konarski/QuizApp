@@ -99,12 +99,13 @@ def quizView(request, pk):
 
 def home(request):
     category = Category.objects.all()
-    users = Profile.objects.all().order_by('name').values()[:3]
+    users = Profile.objects.all().order_by('-level', '-progress').values()[:3]
     quizes = Quiz.objects.all().order_by('-added').values()[:3]
     myFilter = QuizFilter(request.GET, queryset=quizes)
     quizes = myFilter.qs
     context = {'users': users, 'quizes': quizes, 'category': category, 'myFilter': myFilter}
     return render(request, 'quizes/home.html', context)
+
 
 def users(request):
     users = User.objects.all()
@@ -189,4 +190,12 @@ def add_question(request, pk):
         return redirect('add_question', pk=quiz.id)
 
 
+def acountDetails(request):
+    user = request.user
+    profile = get_object_or_404(Profile, user=user)
 
+    created_quizes = Quiz.objects.filter(author=profile)
+    history_quizes = DoneQuizes.objects.filter(user=profile).order_by('date_completed')
+
+    context = {'user': user, 'profile': profile, 'created_quizes': created_quizes, 'history_quizes': history_quizes}
+    return render(request, 'quizes/account.html', context)
