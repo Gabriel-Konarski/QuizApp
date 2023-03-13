@@ -1,21 +1,26 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Quiz, Question, Answer, Profile, User, Category, DoneQuizes
-from .filters import QuizFilter
 from django.core.paginator import Paginator
+from django.http import Http404
+
+from .models import Quiz, Question, Answer, Profile, User, Category, DoneQuizes, Type
+from .filters import QuizFilter
 
 
 def quizView(request, pk):
-    quizz = get_object_or_404(Quiz, id=pk)
-    questionn = Question.objects.filter(quiz=quizz.id)
+    quiz = get_object_or_404(Quiz, id=pk)
+    questions = Question.objects.filter(quiz=quiz)
 
     if request.method == 'GET':
-        answers = []
-        for quest in questionn:
-            answerr = quest.answer_set.all()
-            answers.append(answerr)
+        context = {"quiz": quiz, "questions": questions, 'done': False}
 
-        context = {"quiz": quizz, 'question': questionn, 'answers': answers}
-        return render(request, 'quizes/quiztemplate.html', context)
+        if quiz.type == Type.objects.get(name='Checkbox'):
+            answers = [question.answer_set.all() for question in questions]
+            context['answers'] = answers
+            return render(request, 'quizes/quiztemplate.html', context)
+
+        elif quiz.type == Type.objects.get(name='KeyValue'):
+            return render(request, 'quizes/key_value_quiz.html', context)
+
 
     elif request.method == 'POST':
         pts = 0
@@ -23,14 +28,28 @@ def quizView(request, pk):
         data = request.POST
         user = request.user
         levelup_flag = False
-        for quest in questionn:
-            max_points += 1
-            answer = get_object_or_404(Answer, id=data.get(str(quest.id)))
-            if answer.correct:
-                pts += 1
 
-        max_points *=quizz.level
-        points = pts*quizz.level
+        if quiz.type == Type.objects.get(name='Checkbox'):
+            template_name = 'quizes/quiztemplate.html'
+            type = 'checkbox'
+            for question in questions:
+                max_points += 1
+                answer = get_object_or_404(Answer, id=data.get(str(question.id)))
+                if answer.correct:
+                    pts += 1
+
+        elif quiz.type == Type.objects.get(name='KeyValue'):
+            template_name = 'quizes/key_value_quiz.html'
+            type = 'keyvalue'
+            for question in questions:
+                max_points += 1
+                answer = get_object_or_404(Answer, question=question)
+                if data[str(question.id)] == answer.name:
+                    pts += 1
+
+
+        max_points *= quiz.level
+        points = pts*quiz.level
 
         if user != 'AnonymousUser':
             profil = Profile.objects.get(user=user)
@@ -38,7 +57,7 @@ def quizView(request, pk):
             try:
                 check_done_quiz = DoneQuizes.objects.get(
                     user=profil,
-                    quiz=quizz
+                    quiz=quiz
                 )
 
             except:
@@ -47,22 +66,22 @@ def quizView(request, pk):
             if not check_done_quiz:
                 done_quiz = DoneQuizes.objects.create(
                     user=profil,
-                    quiz=quizz,
+                    quiz=quiz,
                     points=points
                 )
 
-                if quizz.author != profil:
+                if quiz.author != profil:
                     profil.progress += points
                     if profil.progress >= 100:
                         levelup_flag = True
                     profil.save()
 
-                    quizz.completed_num += 1
-                    quizz.save()
+                    quiz.completed_num += 1
+                    quiz.save()
 
             else:
                 if check_done_quiz.points < points:
-                    if quizz.author != profil:
+                    if quiz.author != profil:
                         profil.progress += points - check_done_quiz.points
                         if profil.progress >= 100:
                             levelup_flag = True
@@ -70,11 +89,11 @@ def quizView(request, pk):
                     check_done_quiz.points = points
                     check_done_quiz.save()
 
+        answers = [question.answer_set.all() for question in questions]
+        context = {'points': points, 'max_points': max_points, 'levelup_flag': levelup_flag, 'done': True,
+                   "quiz": quiz, "questions": questions, 'answers': answers}
 
-
-        context = {'points': points, 'max_points': max_points, 'levelup_flag': levelup_flag}
-        return render(request, 'quizes/points.html', context)
-
+        return render(request, template_name, context)
 
 
 def home(request):
