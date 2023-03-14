@@ -7,3 +7,4 @@ django-filter==22.1
 soupsieve==2.4
 sqlparse==0.4.3
 tzdata==2022.7
+django-gravatar2==1.4.4

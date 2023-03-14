@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
+{% block title %}Category: {{ category.name }}{% endblock %}
 
 {% block content %}
     <h1>{{ category.name }}</h1>
