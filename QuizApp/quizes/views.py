@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
-from django.http import Http404
 
 from .models import Quiz, Question, Answer, Profile, User, Category, DoneQuizes, Type
 from .filters import QuizFilter
