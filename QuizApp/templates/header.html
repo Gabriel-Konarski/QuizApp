@@ -1,96 +1,93 @@
 {% load static %}
+{% load gravatar %}
 
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-    <symbol id="header-logo" viewBox="0 0 250 40">
-    <g transform="matrix(0.0777173,0,0,0.0777173,1.04851e-13,0)">
-        <g transform="matrix(1.10696,0,0,1.10696,5.11591e-13,-54.764)">
-            <path d="M514.905,49.472L944.002,50.79L903.453,360.244L639.519,371.484L560.937,468.849L573.805,374.816L511.98,373.575L514.905,49.472Z" style="fill:rgb(4,157,217);"/>
-        </g>
-        <g transform="matrix(4.42411,0,0,4.42411,-738.693,-1166.88)">
-            <path d="M198.805,349.021C180.504,338.017 166.97,321.007 166.97,304.636C166.97,277.793 203.343,263.754 237.48,263.754C271.617,263.754 301.71,299.016 307.086,325.315C312.808,353.302 277.383,362.18 237.48,361.026C229.605,360.799 221.609,359.102 213.968,356.298L213.14,379.484L198.805,349.021Z" style="fill:rgb(242,29,47);"/>
-        </g>
-        <g transform="matrix(1.10696,0,0,1.10696,0,-54.764)">
-            <path d="M542.185,374.181L511.98,373.575L513.617,192.145C537.003,226.51 553.295,262.747 559.992,295.505C566.596,327.809 559.484,353.743 542.185,374.181Z" style="fill:rgb(3,76,140);"/>
-        </g>
-        <g transform="matrix(7.08143,0,0,7.5955,-946.028,-1747.2)">
-            <path d="M166.312,252.394L171.57,252.394C171.57,249.187 173.781,247.355 177.27,247.355C180.808,247.355 182.92,249.325 182.92,252.532C182.92,257.342 178.645,258.258 173.093,258.258L171.471,258.258L171.717,265.45L176.582,265.45L176.778,261.831C183.363,261.831 188.276,258.991 188.276,252.532C188.276,246.576 183.805,242.957 177.22,242.957C170.538,242.957 166.263,246.851 166.312,252.394ZM177.614,272.231C177.614,270.352 176.041,268.886 174.076,268.886C172.061,268.886 170.489,270.352 170.489,272.231C170.489,274.109 172.061,275.575 174.076,275.575C176.041,275.575 177.614,274.109 177.614,272.231Z" style="fill:white;fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(1.10696,0,0,1.10696,5.68434e-14,-54.764)">
-            <path d="M514.876,49.472L944.002,50.766L903.14,360.922L640.332,371.435L561.295,468.849L574.143,374.549L511.98,374.277L514.876,49.472Z" style="fill:none;"/>
-        </g>
-        <g transform="matrix(5.43951,0,0,6.34849,-159.917,-1460.41)">
-            <path d="M162.915,251.233L169.76,251.233C169.76,247.397 172.639,245.204 177.181,245.204C181.786,245.204 184.537,247.561 184.537,251.398C184.537,257.153 178.972,258.249 171.743,258.249L169.632,258.249L169.952,266.854L176.285,266.854L176.541,262.524C185.113,262.524 191.51,259.126 191.51,251.398C191.51,244.272 185.689,239.942 177.117,239.942C168.417,239.942 162.851,244.601 162.915,251.233ZM177.628,274.966C177.628,272.719 175.581,270.965 173.023,270.965C170.4,270.965 168.353,272.719 168.353,274.966C168.353,277.213 170.4,278.967 173.023,278.967C175.581,278.967 177.628,277.213 177.628,274.966Z" style="fill:white;fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(9.606,0,0,9.606,-347.383,2241.92)">
-            <path d="M165.22,-210.987C165.22,-217.237 168.82,-221.187 174.52,-221.187C180.12,-221.187 183.77,-217.237 183.77,-210.987C183.77,-204.837 180.12,-200.787 174.52,-200.787C168.82,-200.787 165.22,-204.837 165.22,-210.987ZM192.47,-210.987C192.47,-221.537 184.52,-228.937 174.52,-228.937C164.57,-228.937 156.47,-221.537 156.47,-210.987C156.47,-200.437 164.57,-192.987 174.52,-192.987C175.87,-192.987 177.17,-193.137 178.42,-193.387L182.92,-187.337L193.27,-187.337L185.57,-196.587C189.77,-199.787 192.47,-204.837 192.47,-210.987Z" style="fill:rgb(7,140,3);fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(9.606,0,0,9.606,-347.383,2241.92)">
-            <path d="M224.87,-221.237L216.32,-221.237L216.32,-206.087C216.32,-202.287 214.22,-200.187 210.92,-200.187C207.72,-200.187 205.57,-202.287 205.57,-206.087L205.57,-221.237L197.07,-221.237L197.07,-204.937C197.07,-197.487 201.42,-193.037 207.87,-193.037C211.62,-193.037 214.62,-194.737 216.32,-197.137L216.32,-193.337L224.87,-193.337L224.87,-221.237Z" style="fill:rgb(7,140,3);fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(9.606,0,0,9.606,-347.383,2241.92)">
-            <path d="M231.02,-193.337L239.57,-193.337L239.57,-221.237L231.02,-221.237L231.02,-193.337ZM235.32,-224.137C238.32,-224.137 240.37,-226.187 240.37,-228.737C240.37,-231.337 238.32,-233.387 235.32,-233.387C232.27,-233.387 230.22,-231.337 230.22,-228.737C230.22,-226.187 232.27,-224.137 235.32,-224.137Z" style="fill:rgb(7,140,3);fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(9.606,0,0,9.606,-347.383,2241.92)">
-            <path d="M265.62,-221.237L244.32,-221.237L244.32,-214.187L255.82,-214.187L244.22,-200.137L244.22,-193.337L265.87,-193.337L265.87,-200.387L253.77,-200.387L265.62,-214.437L265.62,-221.237Z" style="fill:rgb(7,140,3);fill-rule:nonzero;"/>
-        </g>
-        <g transform="matrix(9.597,0,0,9.597,-345.974,2242.5)">
-            <path d="M165.22,-210.987C165.22,-217.237 168.82,-221.187 174.52,-221.187C180.12,-221.187 183.77,-217.237 183.77,-210.987C183.77,-204.837 180.12,-200.787 174.52,-200.787C168.82,-200.787 165.22,-204.837 165.22,-210.987ZM192.47,-210.987C192.47,-221.537 184.52,-228.937 174.52,-228.937C164.57,-228.937 156.47,-221.537 156.47,-210.987C156.47,-200.437 164.57,-192.987 174.52,-192.987C175.87,-192.987 177.17,-193.137 178.42,-193.387L182.92,-187.337L193.27,-187.337L185.57,-196.587C189.77,-199.787 192.47,-204.837 192.47,-210.987Z" style="fill:rgb(7,140,3);fill-rule:nonzero;"/>
-            <path d="M224.87,-221.237L216.32,-221.237L216.32,-206.087C216.32,-202.287 214.22,-200.187 210.92,-200.187C207.72,-200.187 205.57,-202.287 205.57,-206.087L205.57,-221.237L197.07,-221.237L197.07,-204.937C197.07,-197.487 201.42,-193.037 207.87,-193.037C211.62,-193.037 214.62,-194.737 216.32,-197.137L216.32,-193.337L224.87,-193.337L224.87,-221.237Z" style="fill:rgb(7,140,3);fill-rule:nonzero;"/>
-            <path d="M231.02,-193.337L239.57,-193.337L239.57,-221.237L231.02,-221.237L231.02,-193.337ZM235.32,-224.137C238.32,-224.137 240.37,-226.187 240.37,-228.737C240.37,-231.337 238.32,-233.387 235.32,-233.387C232.27,-233.387 230.22,-231.337 230.22,-228.737C230.22,-226.187 232.27,-224.137 235.32,-224.137Z" style="fill:rgb(7,140,3);fill-rule:nonzero;"/>
-            <path d="M265.62,-221.237L244.32,-221.237L244.32,-214.187L255.82,-214.187L244.22,-200.137L244.22,-193.337L265.87,-193.337L265.87,-200.387L253.77,-200.387L265.62,-214.437L265.62,-221.237Z" style="fill:rgb(7,140,3);fill-rule:nonzero;"/>
-            <path d="M294.52,-193.337L303.57,-193.337L290.87,-228.437L280.97,-228.437L268.27,-193.337L277.22,-193.337L279.32,-199.537L292.42,-199.537L294.52,-193.337ZM290.22,-206.137L281.57,-206.137L285.87,-218.987L290.22,-206.137Z" style="fill:rgb(7,140,3);fill-rule:nonzero;"/>
-            <path d="M315.97,-217.287L315.97,-221.237L307.42,-221.237L307.42,-180.037L315.97,-180.037L315.97,-197.237C317.52,-194.887 320.47,-192.937 324.57,-192.937C331.42,-192.937 336.87,-198.537 336.87,-207.337C336.87,-216.137 331.42,-221.637 324.57,-221.637C320.47,-221.637 317.52,-219.737 315.97,-217.287ZM328.17,-207.337C328.17,-202.887 325.27,-200.387 322.02,-200.387C318.82,-200.387 315.92,-202.837 315.92,-207.287C315.92,-211.737 318.82,-214.187 322.02,-214.187C325.27,-214.187 328.17,-211.787 328.17,-207.337Z" style="fill:rgb(7,140,3);fill-rule:nonzero;"/>
-            <path d="M349.92,-217.287L349.92,-221.237L341.37,-221.237L341.37,-180.037L349.92,-180.037L349.92,-197.237C351.47,-194.887 354.42,-192.937 358.52,-192.937C365.37,-192.937 370.82,-198.537 370.82,-207.337C370.82,-216.137 365.37,-221.637 358.52,-221.637C354.42,-221.637 351.47,-219.737 349.92,-217.287ZM362.12,-207.337C362.12,-202.887 359.22,-200.387 355.97,-200.387C352.77,-200.387 349.87,-202.837 349.87,-207.287C349.87,-211.737 352.77,-214.187 355.97,-214.187C359.22,-214.187 362.12,-211.787 362.12,-207.337Z" style="fill:rgb(7,140,3);fill-rule:nonzero;"/>
-        </g>
-    </g>
-</svg>
-
-<nav class="navbar navbar-static-top border-bottom navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-static-top border-bottom navbar-expand-xl navbar-light bg-light">
     <div class="container">
-        <a href="/" class="navbar-brand">
-            <svg class="bi me-2" width="250" height="40"><use xlink:href="#header-logo"/></svg>
+        <a href="{% url 'home' %}" class="navbar-brand flex-grow-1">
+            <img src="{% static 'images/logo.svg' %}" title="QuizApp">
         </a>
-        <div class="d-flex">
-                <label class="switch" for="lightSwitch">
-                    <input type="checkbox" id="lightSwitch">
-                    <span class="slider">
-                        <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
-                        </svg>
-                    </span>
-                </label>
-            </div>
-            <script src="{% static 'js/switch.js' %}"></script>
-        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <div class="navbar-nav ms-auto">
-                    <a href="{% url 'home' %}" class="nav-link {% if request.path == home %}active{% endif %}">Home</a>
-                    <a href="#" class="nav-link">Profile</a>
-                    <a href="#" class="nav-link">Messages</a>
-            </div>
-            {% if user.is_authenticated %}
-            <div class="navbar-nav dropdown">
+
+        {% if user.is_authenticated %}
+            <div class="nav-item dropdown order-xl-3">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    {{ user.username }}
+                    <img src="{% gravatar_url user.email 38 %}" alt="profile-pic" class="rounded-circle">
                 </a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Account</a>
-                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                    <h6 class="dropdown-header">{{ user.email }}</h6>
+                    <a class="dropdown-item" href="#"><i class="bi bi-person"></i> Account</a>
+                    <a><hr class="dropdown-divider"></a>
+                    <a class="dropdown-item" href="{% url 'logout' %}"><i class="bi bi-power"></i> Logout</a>
                 </div>
             </div>
 
             {% else %}
-            <a href="{% url 'login' %}" class="nav-link {% if request.path == login %}active{% endif %}">Login</a>
+
+            <div class="nav-item dropdown order-xl-3">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="http://www.gravatar.com/avatar/?s=38&d=mm&r=g" alt="profile-pic" class="rounded-circle">
+                </a>
+                <div class="dropdown-menu bg-light">
+                    <div class="text-center my-2">
+                        <a href="{% url 'login' %}">
+                            <button class="btn btn-primary"><i class="bi bi-person-fill"></i> Login</button>
+                        </a>
+                    </div>
+                    <div class="text-center my-2">
+                        <a href="{% url 'register' %}">
+                            <button class="btn btn-primary"><i class="bi bi-person-fill-up"></i> Register</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
 
             {% endif %}
-            
-            <form method="get" action="{% url 'allcategory'  %}">
-                {{ myFilter.form }}
-                <button class="btn btn-outline-primary" type="submit">Search</button>
 
-            </form>
+        <div class="d-flex ps-2 pe-2 order-xl-2">
+            <label class="switch" for="lightSwitch">
+                <input type="checkbox" id="lightSwitch">
+                <span class="slider bg-light">
+                    <i class="bi bi-sun-fill" id="sun"></i>
+                    <i class="bi bi-moon-fill" id="moon"></i>
+                </span>
+            </label>
+        </div>
+
+        <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end order-xl-1" id="navbarNav">
+            <div class="navbar-nav">
+                <a href="{% url 'home' %}" class="nav-link {% if request.path == home %}active{% endif %}">Home</a>
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="#">Account</a>
+                            <a class="dropdown-item" href="#">Logout</a>
+                        </div>
+                </div>
+                <a href="#" class="nav-link">Profile</a>
+                <a href="#" class="nav-link">Messages</a>
+            </div>
+
+<!--            <form method="get" action="{% url 'allcategory' %}">-->
+<!--                {{ myFilter.form }}-->
+<!--                <button class="btn btn-outline-primary" type="submit">Search</button>-->
+<!--            </form>-->
+
+            <div class="nav my-2 px-2 flex-nowrap align-items-center">
+                <div class="nav-item w-100">
+                    <form method="GET" class="position-relative" action="{% url 'allcategory' %}">
+                        <input class="form-control pe-2 bg-transparent" type="search" placeholder="Search..." aria-label="Search">
+                        <button class="bg-transparent p-2 position-absolute top-50 end-0 translate-middle-y border-0 text-primary-hover text-reset" type="submit">
+                            <i class="bi bi-search fs-5"> </i>
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
+
+<script src="{% static 'js/switch.js' %}"></script>
+
 </nav>
