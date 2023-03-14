@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+
+{% block content %}
+
+<div class="profile-details">
+    {% if profile.name %}
+        <h1>{{ profile.name }}</h1>
+    {% else %}
+        <h1>{{ user.username }}</h1>
+    {% endif %}
+    <p>Account created: {{profile.created}}</p>
+    <h3>Level: {{profile.level}}</h3>
+    <h3>Next level: {{profile.progress}} / 100</h3>
+</div>
+<div class="table table-dark">
+    <p>Your quizes</p>
+    <table>
+        <tr>
+            <th>Quiz</th>
+            <th>Created</th>
+            <th>Modified</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        {% for quiz in created_quizes %}
+        <tr>
+            <td><a href="{% url 'quiz' quiz.id %}">{{quiz.name}}</a></td>
+            <td>{{quiz.added}}</td>
+            <td>{{quiz.modified}}</td>
+            <td><a href="#">Edit</a></td>
+            <td><a href="{% url 'quiz-delete' quiz.id %}">delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+<div class="table table-dark">
+    <p>History</p>
+    <table>
+        <tr>
+            <th>Quiz</th>
+            <th>Points</th>
+            <th>Date</th>
+        </tr>
+        {% for quiz in history_quizes %}
+        <tr>
+            <td><a href="{% url 'quiz' quiz.quiz.id %}">{{quiz.quiz}}</a></td>
+            <td>{{quiz.points}}</td>
+            <td>{{quiz.date_completed}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+{% endblock %}

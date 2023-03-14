@@ -5,25 +5,64 @@
 
 {% block content %}
 
-   <h1>Name: {{ quiz.name }}</h1>
-   <h5>Category: {{ quiz.category }}</h5>
-   <h5>Created by: {{ quiz.author }}</h5>
+    <h1>Name: {{ quiz.name }}</h1>
+    <h5>Category: {{ quiz.category }}</h5>
+    <h5>Created by: {{ quiz.author }}</h5>
 
-    <div>
-        <form action="" method="POST">{% csrf_token %}
-            {% for quest in question %}
-                <p>{{ quest }}</p>
-                {% for ans in answers %}
-                    {% for a in ans %}
-                        {% if a.question == quest %}
-                                <input type="radio" name="{{quest.id}}" value="{{ a.id }}" required>
-                                <label>{{ a }}</label>
-                        {% endif %}
+    {% if done == False %}
+
+        <div>
+            <form action="" method="POST">{% csrf_token %}
+                {% for question in questions %}
+                    <p>{{ question }}</p>
+                    {% for ans in answers %}
+                        {% for a in ans %}
+                            {% if a.question == question %}
+                                    <input type="radio" name="{{question.id}}" value="{{ a.id }}" required>
+                                    <label>{{ a }}</label>
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
                 {% endfor %}
-            {% endfor %}
-        <input type="submit" class="btn btn-primary">
-       </form>
-    </div>
+            <input type="submit" class="btn btn-primary">
+           </form>
+        </div>
 
+    {% else %}
+
+        <div>
+            <h2>Score</h2>
+            <p>Your score is {{points}}/{{max_points}}</p>
+            <p>!Your best score is x/x!</p>
+
+            {% if points == max_points %}
+                <p>This is max score! :)</p>
+            {% endif %}
+
+            {% if levelup_flag %}
+                <h1>Congratulations, you earned next level!</h1>
+            {% endif %}
+        </div>
+
+
+        <div>
+                {% for question in questions %}
+                    <p>{{ question }}</p>
+                    <ul>
+                        {% for answer in answers %}
+                            {% for ans in answer %}
+                                {% if ans.question == question %}
+                                    {% if ans.correct %}
+                                        <li style="color: #00ff00"> {{ ans }} </li>
+                                    {% else %}
+                                        <li> {{ ans }} </li>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                {% endfor %}
+        </div>
+
+    {% endif %}
 {% endblock %}

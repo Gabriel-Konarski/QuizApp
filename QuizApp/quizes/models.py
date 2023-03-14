@@ -20,7 +20,8 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def create_user_profile(sender, instance, created, **kwargs):
         if created:
-            Profile.objects.create(user=instance)
+            Profile.objects.create(user=instance, name=instance.username)
+
 
     # Save profile whenever user is saved
     @receiver(post_save, sender=User)
@@ -47,21 +48,25 @@ class DoneQuizes(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=32)
+    name = models.CharField(max_length=32, unique=True)
 
     def __str__(self):
         return self.name
 
 
 class Quiz(models.Model):
-    author = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    completed_num = models.IntegerField(null=True, default=0)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True)
+    level = models.IntegerField()
     description = models.TextField()
+    completed_num = models.IntegerField(null=True, default=0)
+
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    type = models.ForeignKey('Type', null=True, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, null=True, on_delete=models.SET_NULL)
+
     added = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    level = models.IntegerField()
+
 
     def __str__(self):
         return self.name
@@ -78,8 +83,15 @@ class Question(models.Model):
 
 class Answer(models.Model):
     name = models.CharField(max_length=32)
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
     correct = models.BooleanField(default=False)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+
+class Type(models.Model):
+    name = models.CharField(max_length=64, unique=True)
 
     def __str__(self):
         return self.name

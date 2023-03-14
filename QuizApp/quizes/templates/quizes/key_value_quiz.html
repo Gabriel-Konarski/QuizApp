@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block title %}Key-value {{quiz.name}}{% endblock %}
+
+{% block content %}
+
+   <h1>Name: {{ quiz.name }}</h1>
+   <h5>Category: {{ quiz.category }}</h5>
+   <h5>Created by: {{ quiz.author }}</h5>
+
+    {% if done == False %}
+
+        <div>
+            <form action="" method="POST">{% csrf_token %}
+                <table>
+                    <tr>
+                        <th>question</th>
+                        <th>answer</th>
+                    </tr>
+                {% for question in questions %}
+                    <tr>
+                        <td>{{ question }}</td>
+                        <td><input type="text" name="{{question.id}}" placeholder="answer" required></td>
+                    </tr>
+                {% endfor %}
+                </table>
+            <input type="submit" class="btn btn-primary">
+           </form>
+        </div>
+
+    {% else %}
+
+         <div>
+            <h2>Score</h2>
+            <p>Your score is {{points}}/{{max_points}}</p>
+            <p>!Your best score is x/x!</p>
+
+            {% if points == max_points %}
+                <p>This is max score! :)</p>
+            {% endif %}
+
+            {% if levelup_flag %}
+                <h1>Congratulations, you earned next level!</h1>
+            {% endif %}
+        </div>
+
+        <div>
+        <table>
+            <tr>
+                <th>question</th>
+                <th>answer</th>
+            </tr>
+            {% for question in questions %}
+                <tr>
+                    <td>{{ question }}</td>
+                    {% for answer in answers %}
+                        {% for ans in answer %}
+                            {% if ans.question == question %}
+                                <td> {{ ans }} </td>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        <input type="submit" class="btn btn-primary">
+
+        </div>
+
+    {% endif %}
+
+{% endblock %}

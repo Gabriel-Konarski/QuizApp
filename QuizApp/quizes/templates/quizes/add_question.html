@@ -2,23 +2,10 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-    <form action="" method="POST">{% csrf_token %}
-        <label for="quiz-category">Category</label>
-        <select name="quiz-category">
-            {% for category in categories %}
-                <option value="{{ category }}">{{ category }}</option>
-            {% endfor %}
-        </select>
 
-        <input type="text" name="quiz-name" placeholder="Quiz name">
-        <textarea name="quiz-description"></textarea>
-
-            {% for level in levels %}
-                <input type="radio" name="quiz-level" value="{{ level }}" placeholder="Quiz-level">
-                <label>{{ level }}</label>
-            {% endfor %}
-        <input type="text" name="question" placeholder="Question">
-    <p>
+        <form action="{% url 'add_question' quiz.id %}" method="POST">{% csrf_token %}
+            <input type="text" name="question" placeholder="Question">
+            <p>
         <input type="text" name="answer1" placeholder="Answer">
         <input type="radio" name="correct_answer" value="1">
     </p>
@@ -38,7 +25,5 @@
         <input type="submit" name="Submit">
 
     </form>
-
-
-
+               
 {% endblock %}
