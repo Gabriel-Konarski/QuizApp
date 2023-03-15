@@ -31,18 +31,18 @@
 
     {% else %}
 
-         <div>
-            <h2>Score</h2>
-            <p>Your score is {{points}}/{{max_points}}</p>
-            <p>!Your best score is x/x!</p>
-
-            {% if points == max_points %}
-                <p>This is max score! :)</p>
-            {% endif %}
-
-            {% if levelup_flag %}
-                <h1>Congratulations, you earned next level!</h1>
-            {% endif %}
+         <div class="card text-bg-secondary" style="width: 18rem;">
+            <div class="card-body">
+                <h4 class="card-title">Score</h4>
+                {% if levelup_flag %}
+                    <h6 class="card-subtitle mb-2">Congratulations, you earned next level!</h6>
+                {% endif %}
+                <h6 class="card-subtitle mb-2">Your score is {{points}}/{{max_points}}</h6>
+                <p class="card-text"> !Your best score is x/x!</p>
+                {% if points == max_points %}
+                    <p class="card-text"> This is max score! :)</p>
+                {% endif %}
+            </div>
         </div>
 
         <div>
@@ -67,6 +67,24 @@
         <input type="submit" class="btn btn-primary">
 
         </div>
+
+        <h3>Comments</h3>
+
+        {% if user.is_authenticated %}
+            <input type="text" name="comment" placeholder="Write your comment here" required>
+            <input type="submit" class="btn btn-primary">
+        {% endif %}
+
+        {% if comments|length > 0 %}
+            {% for comment in comments %}
+                <div class="card text-bg-secondary" style="min-width: 18rem;">
+                    <h5 class="card-title">{{comment.author}}</h5>
+                    <h6 class="card-subtitle">Level {{comment.author.level}} {{comment.added}}</h6>
+                    <p class="card-text" style="font-size: 20px">{{comment.content}}</p>
+                </div>
+
+                {% endfor %}
+        {% endif %}
 
     {% endif %}
 

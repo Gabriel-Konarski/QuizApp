@@ -95,3 +95,15 @@ class Type(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Comment(models.Model):
+    content = models.TextField()
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    added = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.content
