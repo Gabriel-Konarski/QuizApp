@@ -126,9 +126,10 @@ def allcategory(request):
     if not myFilter.is_bound:
         myFilter.form = myFilter.form.__class__(request.GET)
     quizes = myFilter.qs
-    p = Paginator(quizes, 2)
+    p = Paginator(quizes, 1)
     page = request.GET.get('page')
     quizes_list = p.get_page(page)
+    nums = "a" * quizes_list.paginator.num_pages
     name = request.GET.get('name', '')
     querystring = request.GET.copy()
     if 'page' in querystring:
@@ -142,10 +143,43 @@ def allcategory(request):
         'quizes': quizes,
         'category': category,
         'name': name,
-        'querystring': querystring.urlencode()
+        'querystring': querystring.urlencode(),
+        'nums': nums
     }
     return render(request, 'quizes/all_category.html', context)
 
+
+
+def update_quiz(request, pk):
+    quiz = Quiz.objects.get(id=pk)
+    questions = Quiz.objects.get(id=pk).question_set.all()
+    categories = Category.objects.all()
+    levels = (1, 2, 3, 4, 5, 6)
+    answers = [question.answer_set.all() for question in questions]
+
+    if request.method == 'POST':
+        quiz.name = request.POST.get('quiz_name')
+        quiz.description = request.POST.get('quiz_description')
+        quiz.category_id = request.POST.get('category')
+        quiz.level = request.POST.get('level')
+        quiz.save()
+        for question in questions:
+            question.content = request.POST.get(f'question_{question.id}')
+            question.save()
+
+            selected_answer_id = request.POST.get(f'question_{question.id}_answer')
+            for answer in question.answer_set.all():
+                answer_name = request.POST.get(f'answer_{answer.id}')
+                answer_correct = answer.id == int(selected_answer_id)
+
+                answer.name = answer_name
+                answer.correct = answer_correct
+                answer.save()
+
+        return redirect('quiz', pk=quiz.id)
+
+    context = {'quiz': quiz, 'questions': questions, 'answers': answers, 'categories': categories, 'levels': levels}
+    return render(request, 'quizes/update_quiz.html', context)
 
 
 def categoryView(request, pk):
@@ -160,14 +194,17 @@ def categoryView(request, pk):
 def createquizView(request):
     if request.method == "GET":
         categories = Category.objects.all()
+        types = Type.objects.all()
         levels =(1, 2, 3, 4, 5, 6)
-        return render(request, 'quizes/create_quiz.html', {'categories': categories, 'levels': levels})
+        return render(request, 'quizes/create_quiz.html', {'categories': categories, 'levels': levels, 'types': types})
 
     if request.method == "POST":
         user = request.user
         category = Category.objects.get(name=request.POST['quiz-category'])
+        type = Type.objects.get(name=request.POST['quiz-type'])
         profil = Profile.objects.get(user=user)
         quiz = Quiz.objects.create(author=profil, category=category,
+                                   type=type,
                                    name=request.POST['quiz-name'],
                                    description=request.POST['quiz-description'],
                                    level=request.POST['quiz-level'])
