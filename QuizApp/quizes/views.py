@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
 
-from .models import Quiz, Question, Answer, Profile, User, Category, DoneQuizes, Type
+from .models import Quiz, Question, Answer, Profile, User, Category, DoneQuizes, Type, Comment
 from .filters import QuizFilter
 
 
@@ -9,9 +9,10 @@ from .filters import QuizFilter
 def quizView(request, pk):
     quiz = get_object_or_404(Quiz, id=pk)
     questions = Question.objects.filter(quiz=quiz)
+    comments = Comment.objects.filter(quiz=quiz).order_by('-added')
 
     if request.method == 'GET':
-        context = {"quiz": quiz, "questions": questions, 'done': False}
+        context = {"quiz": quiz, "questions": questions, 'done': False, 'comments': comments}
 
         if quiz.type == Type.objects.get(name='Checkbox'):
             answers = [question.answer_set.all() for question in questions]
@@ -28,6 +29,12 @@ def quizView(request, pk):
         data = request.POST
         user = request.user
         levelup_flag = False
+
+        if data.get('comment'):
+            Comment.objects.create(content=data.get('comment'),
+                                   quiz=quiz,
+                                   author=Profile.objects.get(user=user))
+            return redirect('quiz', pk=quiz.id)
 
         if quiz.type == Type.objects.get(name='Checkbox'):
             template_name = 'quizes/quiztemplate.html'
@@ -91,7 +98,7 @@ def quizView(request, pk):
 
         answers = [question.answer_set.all() for question in questions]
         context = {'points': points, 'max_points': max_points, 'levelup_flag': levelup_flag, 'done': True,
-                   "quiz": quiz, "questions": questions, 'answers': answers}
+                   "quiz": quiz, "questions": questions, 'answers': answers, 'comments': comments}
 
         return render(request, template_name, context)
 
