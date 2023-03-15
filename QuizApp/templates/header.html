@@ -70,18 +70,19 @@
                 <a href="#" class="nav-link">Messages</a>
             </div>
 
-<!--            <form method="get" action="{% url 'allcategory' %}">-->
-<!--                {{ myFilter.form }}-->
-<!--                <button class="btn btn-outline-primary" type="submit">Search</button>-->
-<!--            </form>-->
+
 
             <div class="nav my-2 px-2 flex-nowrap align-items-center">
                 <div class="nav-item w-100">
-                    <form method="GET" class="position-relative" action="{% url 'allcategory' %}">
-                        <input class="form-control pe-2 bg-transparent" type="search" placeholder="Search..." aria-label="Search">
-                        <button class="bg-transparent p-2 position-absolute top-50 end-0 translate-middle-y border-0 text-primary-hover text-reset" type="submit">
-                            <i class="bi bi-search fs-5"> </i>
-                        </button>
+                    <form method="get" action="{% url 'allcategory' %}" class="d-flex">
+                        <div class="flex-grow-1">
+                            {{ myFilter.form.name }}
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button class="bg-transparent p-2 position-absolute top-50 end-10 translate-middle-y border-0 text-primary-hover text-reset" type="submit">
+                            <i class="bi bi-search fs-5"></i>
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
