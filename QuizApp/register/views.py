@@ -27,7 +27,7 @@ def login_user(request):
 
             return redirect("/")
         else:
-            messages.success(request, "There was an error, Try again...")
+            messages.warning(request, "There was an error, Try again...")
             return redirect("login")
 
     else:
