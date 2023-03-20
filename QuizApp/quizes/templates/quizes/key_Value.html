@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+    <form action="" method="POST">{% csrf_token %}
+        <label for="quiz-category">Category</label>
+        <select name="quiz-category">
+            {% for category in categories %}
+                <option value="{{ category }}">{{ category }}</option>
+            {% endfor %}
+        </select>
+        <select name="quiz-type">
+            {% for type in types %}
+                <option value="{{ type }}">{{ type }}</option>
+            {% endfor %}
+        </select>
+
+        <input type="text" name="quiz-name" placeholder="Quiz name">
+        <textarea name="quiz-description"></textarea>
+
+        {% for level in levels %}
+            <input type="radio" name="quiz-level" value="{{ level }}" placeholder="Quiz-level">
+            <label>{{ level }}</label>
+        {% endfor %}
+
+        {% for i in '12345' %}
+            <input type="text" name="question{{ i }}" placeholder="Question">
+            <p>
+                <input type="text" name="answer{{ i }}" placeholder="Answer">
+{#                <input type="radio" name="correct_answer{{ i }}" value="{{ i }}">#}
+            </p>
+        {% endfor %}
+
+        <input type="submit" name="Submit">
+
+    </form>
+{% endblock %}
