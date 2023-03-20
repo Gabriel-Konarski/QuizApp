@@ -33,20 +33,33 @@ def test_all_category():
 
 @pytest.mark.django_db
 def test_createquiz():
+    username = "test"
+    password = "testpassword"
+    user = User.objects.create_user(username=username, password=password)
+
     client = Client()
+    client.login(username=username, password=password)
+    profil = Profile.objects.get(user=user)
+    profil.level = 5
+    profil.save()
 
     response = client.get('/quiz/create_quiz/', follow=True)
 
     assert response.status_code == 200
 
 
-# @pytest.mark.django_db
-# def test_account():
-#     client = Client()
-#
-#     response = client.get('/quiz/account/', follow=True)
-#
-#     assert response.status_code == 404
+@pytest.mark.django_db
+def test_account():
+    username = "test"
+    password = "testpassword"
+    user = User.objects.create_user(username=username, password=password)
+
+    client = Client()
+    client.login(username=username, password=password)
+
+    response = client.get('/quiz/account/', follow=True)
+
+    assert response.status_code == 200
 
 """DYNAMIC URLS"""
 from django.contrib.auth.models import User
@@ -86,9 +99,13 @@ def test_category():
 
 @pytest.mark.django_db
 def test_addquestion():
-    client = Client()
+    username = "test"
+    password = "testpassword"
+    user = User.objects.create_user(username=username, password=password)
 
-    user = User.objects.create_user('pytest', 'pytest@gmail.com', 'pytestpassword')
+    client = Client()
+    client.login(username=username, password=password)
+
     profile = Profile.objects.get(user=user)
     category = Category.objects.create(name='pytest')
     typ = Type.objects.create(name='Checkbox')
