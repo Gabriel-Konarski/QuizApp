@@ -1,68 +1,51 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load django_bootstrap5 %}
 
 {% block title %}Login{% endblock %}
 
 {% block content %}
 
-<!-- Section: Design Block -->
-<section class="">
-  <!-- Jumbotron -->
-  <div class="px-4 py-5 px-md-5 text-center text-lg-start">
-    <div class="container">
-      <div class="row gx-lg-5 align-items-center">
-        <div class="col-lg-6 mb-5 mb-lg-0">
-          <h1 class="my-5 display-3 fw-bold ls-tight">
-            Txt txt <br />
-            <span class="text-primary">more txt</span>
-          </h1>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            Eveniet, itaque accusantium odio, soluta, corrupti aliquam
-            quibusdam tempora at cupiditate quis eum maiores libero
-            veritatis? Dicta facilis sint aliquid ipsum atque?
-          </p>
-        </div>
+<div class="px-4 py-2 px-md-5 text-center text-lg-start">
+  <div class="container">
+    <div class="row gx-lg-5 align-items-center">
+      <div class="col-lg-7 mb-5 mb-lg-0">
+        <h1 class="pb-3 fw-bold">Login</h1>
+        <img src="{% static 'images/login.svg' %}" title="Login to QuizApp">
+      </div>
 
-        <div class="col-lg-6 mb-5 mb-lg-0">
-          <div class="card bg-light">
-            <div class="card-body py-5 px-md-5">
-              <form>
-                <!-- Username input -->
-                <div class="form-outline mb-4">
-                  <input type="text" id="id_username" class="form-control" />
-                  <label class="form-label" for="id_username">Username</label>
-                </div>
+      <div class="col-lg-5 mb-5 mb-lg-0">
+        <div class="card bg-light">
+          <div class="card-body py-5 px-md-5">
+            <form action="" method="POST">{% csrf_token %}
+              <!-- Username input -->
+              <div class="form-outline mb-2">
+                <input name="username" type="text" id="id_username" class="form-control" required />
+                <label class="form-label" for="id_username">Username</label>
+              </div>
 
-                <!-- Password input -->
-                <div class="form-outline mb-4">
-                  <input type="password" id="form3Example4" class="form-control" />
-                  <label class="form-label" for="form3Example4">Password</label>
-                </div>
+              <!-- Password input -->
+              <div class="form-outline mb-2">
+                <input name="password" type="password" id="id_password" class="form-control" required />
+                <label class="form-label" for="id_password">Password</label>
+              </div>
 
-                <!-- Submit button -->
-                <button type="submit" class="btn btn-primary btn-block mb-4">
-                  Login
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-primary btn-block mb-2 w-100">
+                <i class="bi bi-box-arrow-in-right"></i> Login
+              </button>
+            </form>
+            <hr>
+            <p>Don't have an account?</p>
+            <a href="{% url 'register' %}">
+                <button class="btn btn-secondary btn-block mb-2 w-100">
+                  <i class="bi bi-person-plus"></i> Register
                 </button>
-              </form>
-            </div>
+              </a>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- Jumbotron -->
-</section>
-<!-- Section: Design Block -->
-
-<h1>Login</h1>
-<form action="" method="POST">{% csrf_token %}
-        <label>Username</label>
-        <input name="username" type="text" placeholder="Enter a username" required>
-
-        <label>Password</label>
-        <input name="password" type="password" placeholder="Enter a password" required>
-
-        <button type="submit">Submit</button>
-</form>
+</div>
 {% endblock %}

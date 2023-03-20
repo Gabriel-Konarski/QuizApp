@@ -18,4 +18,7 @@ urlpatterns = [
                                                     success_url=reverse_lazy('account'),
                                                     template_name='quizes/generic_delete.html'
                                                  ), name='quiz-delete'),
+    path('update_quiz/<str:pk>/', views.update_quiz, name='update_quiz'),
+    path('createquizkeyValue/', views.createquizkeyValue, name='key_Value')
+
 ]
