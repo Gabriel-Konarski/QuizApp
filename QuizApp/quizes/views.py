@@ -10,9 +10,12 @@ def quizView(request, pk):
     quiz = get_object_or_404(Quiz, id=pk)
     questions = Question.objects.filter(quiz=quiz)
     comments = Comment.objects.filter(quiz=quiz).order_by('-added')
-
+    quizes = Quiz.objects.all()
+    myFilter = QuizFilter(request.GET, queryset=quizes)
+    quizes = myFilter.qs
     if request.method == 'GET':
-        context = {"quiz": quiz, "questions": questions, 'done': False, 'comments': comments}
+        context = {'quizes': quizes, 'myFilter': myFilter, "quiz": quiz, "questions": questions, 'done': False, 'comments': comments}
+
 
         if quiz.type == Type.objects.get(name='Checkbox'):
             answers = [question.answer_set.all() for question in questions]
@@ -129,7 +132,7 @@ def allcategory(request):
     p = Paginator(quizes, 1)
     page = request.GET.get('page')
     quizes_list = p.get_page(page)
-    nums = "a" * quizes_list.paginator.num_pages
+    nums = " " * quizes_list.paginator.num_pages
     name = request.GET.get('name', '')
     querystring = request.GET.copy()
     if 'page' in querystring:
@@ -195,8 +198,11 @@ def createquizView(request):
     if request.method == "GET":
         categories = Category.objects.all()
         types = Type.objects.all()
+        quizes = Quiz.objects.all()
+        myFilter = QuizFilter(request.GET, queryset=quizes)
+        quizes = myFilter.qs
         levels =(1, 2, 3, 4, 5, 6)
-        return render(request, 'quizes/create_quiz.html', {'categories': categories, 'levels': levels, 'types': types})
+        return render(request, 'quizes/create_quiz.html', {'quizes': quizes, 'myFilter': myFilter, 'categories': categories, 'levels': levels, 'types': types})
 
     if request.method == "POST":
         user = request.user
@@ -242,3 +248,32 @@ def acountDetails(request):
 
     context = {'user': user, 'profile': profile, 'created_quizes': created_quizes, 'history_quizes': history_quizes}
     return render(request, 'quizes/account.html', context)
+
+
+def createquizkeyValue(request):
+    if request.method == "GET":
+        categories = Category.objects.all()
+        types = Type.objects.all()
+        levels =(1, 2, 3, 4, 5, 6)
+        return render(request, 'quizes/key_Value.html', {'categories': categories, 'levels': levels, 'types': types})
+
+    if request.method == "POST":
+        user = request.user
+        category = Category.objects.get(name=request.POST['quiz-category'])
+        type = Type.objects.get(name=request.POST['quiz-type'])
+        profil = Profile.objects.get(user=user)
+        quiz = Quiz.objects.create(author=profil, category=category,
+                                   type=type,
+                                   name=request.POST['quiz-name'],
+                                   description=request.POST['quiz-description'],
+                                   level=request.POST['quiz-level'])
+
+        for i in range(1, 6):
+            question_content = request.POST.get(f"question{i}")
+            answer_name = request.POST.get(f"answer{i}")
+            # correct_answer = request.POST.get(f"correct_answer{i}") == str(i)
+
+            question = Question.objects.create(quiz=quiz, content=question_content)
+            answer = Answer.objects.create(question=question, name=answer_name, correct=True)
+
+        return redirect('home')
