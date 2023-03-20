@@ -64,15 +64,15 @@
                 </tr>
             {% endfor %}
         </table>
-        <input type="submit" class="btn btn-primary">
-
         </div>
 
         <h3>Comments</h3>
 
         {% if user.is_authenticated %}
-            <input type="text" name="comment" placeholder="Write your comment here" required>
-            <input type="submit" class="btn btn-primary">
+            <form method="POST" action=""> {% csrf_token %}
+                <input type="text" name="comment" placeholder="Write your comment here" required>
+                <input type="submit" class="btn btn-primary">
+            </form>
         {% endif %}
 
         {% if comments|length > 0 %}
