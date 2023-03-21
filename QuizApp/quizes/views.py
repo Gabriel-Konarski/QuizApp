@@ -216,61 +216,62 @@ def categoryView(request, pk):
 
 
 @login_required
-def createquizView(request):
+def createquizView(request, pk):
+    categories = Category.objects.all()
+    type = get_object_or_404(Type, id=pk)
+    quizes = Quiz.objects.all()
+    myFilter = QuizFilter(request.GET, queryset=quizes)
+    quizes = myFilter.qs
+    levels = (1, 2, 3, 4, 5, 6)
     user = request.user
-    profile = Profile.objects.get(user=user)
-
+    profil = Profile.objects.get(user=user)
     if profile.level < 5:
         return render(request, 'quizes/too_small_lvl.html', {})
     if request.method == "GET":
-        categories = Category.objects.all()
-        types = Type.objects.all()
-        quizes = Quiz.objects.all()
-        myFilter = QuizFilter(request.GET, queryset=quizes)
-        quizes = myFilter.qs
-        levels =(1, 2, 3, 4, 5, 6)
-        return render(request, 'quizes/create_quiz.html', {'quizes': quizes, 'myFilter': myFilter, 'categories': categories, 'levels': levels, 'types': types})
-
+        context = {'quizes': quizes, 'myFilter': myFilter, 'categories': categories, 'levels': levels, 'done': False}
+        if type.name == 'Checkbox':
+            return render(request, 'quizes/create_quiz.html', context)
+        else:
+            return render(request, 'quizes/key_Value.html', context)
     if request.method == "POST":
-        user = request.user
-        category = Category.objects.get(name=request.POST['quiz-category'])
-        type = Type.objects.get(name=request.POST['quiz-type'])
-        profil = Profile.objects.get(user=user)
-        quiz = Quiz.objects.create(author=profil, category=category,
-                                   type=type,
-                                   name=request.POST['quiz-name'],
-                                   description=request.POST['quiz-description'],
-                                   level=request.POST['quiz-level'])
-        question = Question.objects.create(quiz=quiz, content=request.POST['question'])
-        answer1 = Answer.objects.create(question=question, name=request.POST['answer1'], correct=request.POST.get('correct_answer') == '1')
-        answer2 = Answer.objects.create(question=question, name=request.POST['answer2'], correct=request.POST.get('correct_answer') == '2')
-        answer3 = Answer.objects.create(question=question, name=request.POST['answer3'], correct=request.POST.get('correct_answer') == '3')
-        answer4 = Answer.objects.create(question=question, name=request.POST['answer4'], correct=request.POST.get('correct_answer') == '4')
 
-        return redirect('add_question', pk=quiz.id)
+        try:
+            quizname = request.POST['quiz-name']
+        except:
+            quizname = None
+        if quizname:
+            category = Category.objects.get(name=request.POST['quiz-category'])
+            quiz = Quiz.objects.create(author=profil, category=category,
+                                    type=type,
+                                    name=request.POST['quiz-name'],
+                                    description=request.POST['quiz-description'],
+                                    level=request.POST['quiz-level'])
 
 
-@login_required
-def add_question(request, pk):
-    quiz = Quiz.objects.get(id=pk)
-    user = request.user
-    profile = Profile.objects.get(user=user)
+        if type.name == 'KeyValue':
 
-    if profile != quiz.author:
-        return redirect('home')
+            for i in range(1, 6):
+                question_content = request.POST.get(f"question{i}")
+                answer_name = request.POST.get(f"answer{i}")
 
-    if request.method == "GET":
-        context = {'quiz': quiz}
-        return render(request, 'quizes/add_question.html', context)
+                question = Question.objects.create(quiz=quiz, content=question_content)
+                answer = Answer.objects.create(question=question, name=answer_name, correct=True)
+                return redirect('home')
+        else:
+            if quizname:
+                question = Question.objects.create(quiz=quiz, content=request.POST['question'])
+            else:
+                quiz = Quiz.objects.filter(author=profil).order_by('-added')[:1]
+                question = Question.objects.create(quiz=quiz[0], content=request.POST['question'])
+            answer1 = Answer.objects.create(question=question, name=request.POST['answer1'], correct=request.POST.get('correct_answer') == '1')
+            answer2 = Answer.objects.create(question=question, name=request.POST['answer2'], correct=request.POST.get('correct_answer') == '2')
+            answer3 = Answer.objects.create(question=question, name=request.POST['answer3'], correct=request.POST.get('correct_answer') == '3')
+            answer4 = Answer.objects.create(question=question, name=request.POST['answer4'], correct=request.POST.get('correct_answer') == '4')
 
-    if request.method == "POST":
-        question = Question.objects.create(quiz=quiz, content=request.POST['question'])
-        answer1 = Answer.objects.create(question=question, name=request.POST['answer1'], correct=request.POST.get('correct_answer') == '1')
-        answer2 = Answer.objects.create(question=question, name=request.POST['answer2'], correct=request.POST.get('correct_answer') == '2')
-        answer3 = Answer.objects.create(question=question, name=request.POST['answer3'], correct=request.POST.get('correct_answer') == '3')
-        answer4 = Answer.objects.create(question=question, name=request.POST['answer4'], correct=request.POST.get('correct_answer') == '4')
-
-        return redirect('add_question', pk=quiz.id)
+            if len(Question.objects.filter(quiz=quiz)) == 5:
+                return redirect('home')
+            else:
+                return render(request, 'quizes/create_quiz.html', {'done': True})
 
 
 @login_required
@@ -284,31 +285,3 @@ def acountDetails(request):
     context = {'user': user, 'profile': profile, 'created_quizes': created_quizes, 'history_quizes': history_quizes}
     return render(request, 'quizes/account.html', context)
 
-
-def createquizkeyValue(request):
-    if request.method == "GET":
-        categories = Category.objects.all()
-        types = Type.objects.all()
-        levels =(1, 2, 3, 4, 5, 6)
-        return render(request, 'quizes/key_Value.html', {'categories': categories, 'levels': levels, 'types': types})
-
-    if request.method == "POST":
-        user = request.user
-        category = Category.objects.get(name=request.POST['quiz-category'])
-        type = Type.objects.get(name=request.POST['quiz-type'])
-        profil = Profile.objects.get(user=user)
-        quiz = Quiz.objects.create(author=profil, category=category,
-                                   type=type,
-                                   name=request.POST['quiz-name'],
-                                   description=request.POST['quiz-description'],
-                                   level=request.POST['quiz-level'])
-
-        for i in range(1, 6):
-            question_content = request.POST.get(f"question{i}")
-            answer_name = request.POST.get(f"answer{i}")
-            # correct_answer = request.POST.get(f"correct_answer{i}") == str(i)
-
-            question = Question.objects.create(quiz=quiz, content=question_content)
-            answer = Answer.objects.create(question=question, name=answer_name, correct=True)
-
-        return redirect('home')
