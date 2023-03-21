@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'django_filters',
     'django_gravatar',
+
     'quizes.apps.QuizesConfig',
     'register.apps.RegisterConfig',
 ]
