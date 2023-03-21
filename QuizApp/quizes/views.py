@@ -169,7 +169,9 @@ def allcategory(request):
 @login_required
 def update_quiz(request, pk):
     quiz = Quiz.objects.get(id=pk)
-
+    quizes = Quiz.objects.all()
+    myFilter = QuizFilter(request.GET, queryset=quizes)
+    quizes = myFilter.qs
     user = request.user
     profile = Profile.objects.get(user=user)
 
@@ -202,7 +204,7 @@ def update_quiz(request, pk):
 
         return redirect('quiz', pk=quiz.id)
 
-    context = {'quiz': quiz, 'questions': questions, 'answers': answers, 'categories': categories, 'levels': levels}
+    context = {'quiz': quiz, 'questions': questions, 'answers': answers, 'categories': categories, 'levels': levels, 'quizes': quizes, 'myFilter': myFilter}
     return render(request, 'quizes/update_quiz.html', context)
 
 
@@ -225,7 +227,7 @@ def createquizView(request, pk):
     levels = (1, 2, 3, 4, 5, 6)
     user = request.user
     profil = Profile.objects.get(user=user)
-    if profile.level < 5:
+    if profil.level < 5:
         return render(request, 'quizes/too_small_lvl.html', {})
     if request.method == "GET":
         context = {'quizes': quizes, 'myFilter': myFilter, 'categories': categories, 'levels': levels, 'done': False}
