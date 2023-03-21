@@ -5,6 +5,9 @@ from django.contrib import messages
 
 
 def register(request):
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -18,6 +21,8 @@ def register(request):
 
 
 def login_user(request):
+    if request.user.is_authenticated:
+        return redirect('home')
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']

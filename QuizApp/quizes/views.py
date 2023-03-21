@@ -74,7 +74,7 @@ def quizView(request, pk):
         max_points *= quiz.level
         points = pts*quiz.level
 
-        if user != 'AnonymousUser':
+        if user.is_authenticated:
             profil = Profile.objects.get(user=user)
 
             try:
@@ -113,7 +113,7 @@ def quizView(request, pk):
                     check_done_quiz.save()
 
         answers = [question.answer_set.all() for question in questions]
-        context = {'points': points, 'max_points': max_points, 'levelup_flag': levelup_flag, 'done': True,
+        context = {'quizes': quizes, 'myFilter': myFilter, 'points': points, 'max_points': max_points, 'levelup_flag': levelup_flag, 'done': True,
                    "quiz": quiz, "questions": questions, 'answers': answers, 'comments': comments,
                    'best_score': best_score}
 
@@ -132,11 +132,14 @@ def home(request):
 
 def users(request):
     users = Profile.objects.all().order_by('-level', '-progress')
-    context = {'users': users}
+    quizes = Quiz.objects.all().order_by('-added')[:3]
+    myFilter = QuizFilter(request.GET, queryset=quizes)
+    quizes = myFilter.qs
+    context = {'quizes': quizes, 'myFilter': myFilter, 'users': users}
     return render(request, 'quizes/users.html', context)
 
 
-def allcategory(request):
+def allquizes(request):
     category = Category.objects.all()
     quizes = Quiz.objects.all()
     myFilter = QuizFilter(request.GET, queryset=quizes)
@@ -163,7 +166,7 @@ def allcategory(request):
         'querystring': querystring.urlencode(),
         'nums': nums
     }
-    return render(request, 'quizes/all_category.html', context)
+    return render(request, 'quizes/allquizes.html', context)
 
 
 @login_required
@@ -215,6 +218,15 @@ def categoryView(request, pk):
     quizes = myFilter.qs
     context = {'category': category, 'quizes': quizes, 'myFilter': myFilter}
     return render(request, 'quizes/category.html', context)
+
+
+def allcategories(request):
+    categories = Category.objects.all()
+    quizes = Quiz.objects.all()
+    myFilter = QuizFilter(request.GET, queryset=quizes)
+    quizes = myFilter.qs
+    context = {'categories': categories, 'quizes': quizes, 'myFilter': myFilter}
+    return render(request, 'quizes/allcategories.html', context)
 
 
 @login_required
