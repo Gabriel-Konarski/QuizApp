@@ -6,8 +6,8 @@
 {% block content %}
 
    <h1>Name: {{ quiz.name }}</h1>
-   <h5>Category: {{ quiz.category }}</h5>
-   <h5>Created by: {{ quiz.author }}</h5>
+   Category: <small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary bg-primary bg-opacity-10 border border-primary border-opacity-10 rounded-2">{{ quiz.category }}</small>
+    Created by: <small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary bg-primary bg-opacity-10 border border-primary border-opacity-10 rounded-2">{{ quiz.author }}</small>
 
     {% if done == False %}
 
@@ -21,11 +21,13 @@
                 {% for question in questions %}
                     <tr>
                         <td>{{ question }}</td>
-                        <td><input type="text" name="{{question.id}}" placeholder="answer" required></td>
+                        <td><input type="text" class="form-control my-2" name="{{question.id}}" placeholder="answer" required></td>
                     </tr>
                 {% endfor %}
                 </table>
-            <input type="submit" class="btn btn-primary">
+            <div class="col-12">
+                <input type="submit" class="btn btn-primary mt-4">
+            </div>
            </form>
         </div>
 

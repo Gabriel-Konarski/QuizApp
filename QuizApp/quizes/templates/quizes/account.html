@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
+{% block title %}Account: {{ user.username }}{% endblock %}
+
 
 {% block content %}
 
@@ -14,7 +16,7 @@
     <h3>Level: {{profile.level}}</h3>
     <h3>Next level: {{profile.progress}} / 100</h3>
 </div>
-<div class="table table-dark">
+<div class="table">
     <p>Your quizes</p>
     <table>
         <tr>
@@ -36,7 +38,7 @@
     </table>
 </div>
 
-<div class="table table-dark">
+<div class="table">
     <p>History</p>
     <table>
         <tr>

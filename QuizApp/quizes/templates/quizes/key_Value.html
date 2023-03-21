@@ -1,15 +1,21 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
-{% block content %}
-    <form action="" method="POST">{% csrf_token %}
-        <label for="quiz-category">Category</label>
-        <select name="quiz-category">
-            {% for category in categories %}
-                <option value="{{ category }}">{{ category }}</option>
-            {% endfor %}
-        </select>
+{% block title %}Create quizz{% endblock %}
 
+{% block content %}
+<form action="" method="POST">{% csrf_token %}
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="quiz-category">Category</label>
+                <select class="form-select" name="quiz-category">
+                    {% for category in categories %}
+                        <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
         <input type="text" name="quiz-name" placeholder="Quiz name">
         <textarea name="quiz-description"></textarea>
 
@@ -25,7 +31,8 @@
             </p>
         {% endfor %}
 
-        <input type="submit" name="Submit">
-
-    </form>
+        <div class="col-12">
+            <input type="submit" Name="Submit" class="btn btn-primary mt-4">
+        </div>
+</form>
 {% endblock %}
