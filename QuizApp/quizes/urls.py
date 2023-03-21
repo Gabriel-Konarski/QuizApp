@@ -10,8 +10,6 @@ urlpatterns = [
     path('all_category/', views.allcategory, name='allcategory'),
     path('<int:pk>/', views.quizView, name='quiz'),
     path('category/<str:pk>/', views.categoryView, name='categories'),
-    path('create_quiz/', views.createquizView, name='create_quiz'),
-    path('add_question/<str:pk>/', views.add_question, name='add_question'),
     path('account/', views.acountDetails, name='account'),
     path('quiz/<int:pk>/delete/', DeleteView.as_view(
                                                     model=Quiz,
@@ -19,6 +17,6 @@ urlpatterns = [
                                                     template_name='quizes/generic_delete.html'
                                                  ), name='quiz-delete'),
     path('update_quiz/<str:pk>/', views.update_quiz, name='update_quiz'),
-    path('createquizkeyValue/', views.createquizkeyValue, name='key_Value')
+    path('createquiz/<str:pk>/', views.createquizView, name='create_quiz')
 
 ]

@@ -9,11 +9,6 @@
                 <option value="{{ category }}">{{ category }}</option>
             {% endfor %}
         </select>
-        <select name="quiz-type">
-            {% for type in types %}
-                <option value="{{ type }}">{{ type }}</option>
-            {% endfor %}
-        </select>
 
         <input type="text" name="quiz-name" placeholder="Quiz name">
         <textarea name="quiz-description"></textarea>
@@ -27,7 +22,6 @@
             <input type="text" name="question{{ i }}" placeholder="Question">
             <p>
                 <input type="text" name="answer{{ i }}" placeholder="Answer">
-{#                <input type="radio" name="correct_answer{{ i }}" value="{{ i }}">#}
             </p>
         {% endfor %}
 
