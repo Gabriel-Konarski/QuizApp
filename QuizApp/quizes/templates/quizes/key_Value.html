@@ -1,37 +1,51 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
+{% block title %}Create quizz{% endblock %}
+
 {% block content %}
-    <form action="" method="POST">{% csrf_token %}
-        <label for="quiz-category">Category</label>
-        <select name="quiz-category">
-            {% for category in categories %}
-                <option value="{{ category }}">{{ category }}</option>
-            {% endfor %}
-        </select>
-        <select name="quiz-type">
-            {% for type in types %}
-                <option value="{{ type }}">{{ type }}</option>
-            {% endfor %}
-        </select>
+<form action="" method="POST">{% csrf_token %}
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="quiz-category">Category</label>
+                <select class="form-select" name="quiz-category">
+                    {% for category in categories %}
+                    <option value="{{ category }}">{{ category }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="quiz-type">Quiz type</label>
+                <select class="form-select" name="quiz-type">
+                    {% for type in types %}
+                    <option value="{{ type }}">{{ type }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
 
-        <input type="text" name="quiz-name" placeholder="Quiz name">
-        <textarea name="quiz-description"></textarea>
+    <input type="text" name="quiz-name" placeholder="Quiz name">
+    <textarea name="quiz-description" placeholder="Quiz description"></textarea>
 
-        {% for level in levels %}
-            <input type="radio" name="quiz-level" value="{{ level }}" placeholder="Quiz-level">
-            <label>{{ level }}</label>
-        {% endfor %}
+    {% for level in levels %}
+        <input type="radio" name="quiz-level" value="{{ level }}" placeholder="Quiz-level">
+        <label>{{ level }}</label>
+    {% endfor %}
 
-        {% for i in '12345' %}
-            <input type="text" name="question{{ i }}" placeholder="Question">
-            <p>
-                <input type="text" name="answer{{ i }}" placeholder="Answer">
+    {% for i in '12345' %}
+        <input type="text" name="question{{ i }}" placeholder="Question">
+        <p>
+            <input type="text" name="answer{{ i }}" placeholder="Answer">
 {#                <input type="radio" name="correct_answer{{ i }}" value="{{ i }}">#}
-            </p>
-        {% endfor %}
+        </p>
+    {% endfor %}
 
-        <input type="submit" name="Submit">
-
-    </form>
+    <div class="col-12">
+        <input type="submit" class="btn btn-primary mt-4">
+    </div>
+</div>
+</form>
 {% endblock %}

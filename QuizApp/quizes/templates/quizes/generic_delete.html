@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
+{% block title %}Delete {{object}} {% endblock %}
 
 {% block content %}
 
@@ -8,7 +9,7 @@
 <form method="post" action="">
   {% csrf_token %}
   {{form.as_p}}
-  <button type="submit">delete</button>
+  <button type="submit" class="btn btn-danger">Delete</button>
 </form>
 
 {% endblock %}

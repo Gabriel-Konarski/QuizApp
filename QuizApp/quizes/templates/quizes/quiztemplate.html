@@ -6,25 +6,29 @@
 {% block content %}
 
     <h1>Name: {{ quiz.name }}</h1>
-    <h5>Category: {{ quiz.category }}</h5>
-    <h5>Created by: {{ quiz.author }}</h5>
+    Category: <small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary bg-primary bg-opacity-10 border border-primary border-opacity-10 rounded-2">{{ quiz.category }}</small>
+    Created by: <small class="d-inline-flex mb-3 px-2 py-1 fw-semibold text-primary bg-primary bg-opacity-10 border border-primary border-opacity-10 rounded-2">{{ quiz.author }}</small>
 
     {% if done == False %}
 
         <div>
             <form action="" method="POST">{% csrf_token %}
                 {% for question in questions %}
-                    <p>{{ question }}</p>
+                    <h3 class="lead mt-3">{{ question }}</h3>
                     {% for ans in answers %}
                         {% for a in ans %}
                             {% if a.question == question %}
-                                    <input type="radio" name="{{question.id}}" value="{{ a.id }}" required>
-                                    <label>{{ a }}</label>
+                                    <div class="form-check form-check-inline">
+                                      <input class="form-check-input" type="radio" name="{{question.id}}" id="inlineRadio1" value="{{ a.id }}" required>
+                                      <label class="form-check-label" for="inlineRadio1">{{ a }}</label>
+                                    </div>
                             {% endif %}
                         {% endfor %}
                     {% endfor %}
                 {% endfor %}
-            <input type="submit" class="btn btn-primary">
+            <div class="col-12">
+                <input type="submit" class="btn btn-primary mt-4">
+            </div>
            </form>
         </div>
 
