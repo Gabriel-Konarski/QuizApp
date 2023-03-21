@@ -38,12 +38,18 @@ def quizView(request, pk):
         max_points = 0
         data = request.POST
         user = request.user
+        profile = Profile.objects.get(user=user)
         levelup_flag = False
+
+        try:
+            best_score = DoneQuizes.objects.get(user=profile, quiz=quiz)
+        except:
+            best_score = None
 
         if data.get('comment'):
             Comment.objects.create(content=data.get('comment'),
                                    quiz=quiz,
-                                   author=Profile.objects.get(user=user))
+                                   author=profile)
             return redirect('quiz', pk=quiz.id)
 
         if quiz.type == Type.objects.get(name='Checkbox'):
@@ -108,13 +114,14 @@ def quizView(request, pk):
 
         answers = [question.answer_set.all() for question in questions]
         context = {'points': points, 'max_points': max_points, 'levelup_flag': levelup_flag, 'done': True,
-                   "quiz": quiz, "questions": questions, 'answers': answers, 'comments': comments}
+                   "quiz": quiz, "questions": questions, 'answers': answers, 'comments': comments,
+                   'best_score': best_score}
 
         return render(request, template_name, context)
 
 
 def home(request):
-    users = Profile.objects.all().order_by('-level', '-progress').values()[:3]
+    users = Profile.objects.all().order_by('-level', '-progress')[:3]
     quizes = Quiz.objects.all().order_by('-added')[:3]
     myFilter = QuizFilter(request.GET, queryset=quizes)
     quizes = myFilter.qs
@@ -159,9 +166,16 @@ def allcategory(request):
     return render(request, 'quizes/all_category.html', context)
 
 
-
+@login_required
 def update_quiz(request, pk):
     quiz = Quiz.objects.get(id=pk)
+
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    if profile != quiz.author:
+        return redirect('home')
+
     questions = Quiz.objects.get(id=pk).question_set.all()
     categories = Category.objects.all()
     levels = (1, 2, 3, 4, 5, 6)

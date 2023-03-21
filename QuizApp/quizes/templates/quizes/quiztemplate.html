@@ -36,7 +36,10 @@
                     <h6 class="card-subtitle mb-2">Congratulations, you earned next level!</h6>
                 {% endif %}
                 <h6 class="card-subtitle mb-2">Your score is {{points}}/{{max_points}}</h6>
-                <p class="card-text"> !Your best score is x/x!</p>
+                {% if best_score %}
+                <p class="card-text"> Your best score is {{best_score.points}}/{{max_points}}</p>
+                {% endif %}
+
                 {% if points == max_points %}
                     <p class="card-text"> This is max score! :)</p>
                 {% endif %}
