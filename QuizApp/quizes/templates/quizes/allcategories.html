@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+
+{% block content %}
+
+
+<div class="table table-dark">
+    <p>Categories</p>
+    {% for category in categories %}
+        <a href="{% url 'categories' category.id %}">{{category}}</a>
+    {% endfor %}
+</div>
+
+
+{% endblock %}

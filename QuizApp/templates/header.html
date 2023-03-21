@@ -60,20 +60,18 @@
             <div class="navbar-nav">
                 <a href="{% url 'home' %}" class="nav-link {% if request.path == home %}active{% endif %}">Home</a>
                 <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categories</a>
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Create Quiz</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="{% url 'allcategory' %}">All categories</a>
-                            <a><hr class="dropdown-divider"></a>
-                            <a class="dropdown-item" href="#">Category item</a>
+                            <a class="dropdown-item" href="{% url 'create_quiz' 1 %}">Checkbox</a>
+                            <a class="dropdown-item" href="{% url 'create_quiz' 2 %}">KeyValue</a>
                         </div>
                 </div>
-                <a href="#" class="nav-link">Profile</a>
-                <a href="#" class="nav-link">Messages</a>
+                <a href="{% url 'allcategories' %}" class="nav-link">Categories</a>
             </div>
 
             <div class="nav my-2 px-2 flex-nowrap align-items-center">
                 <div class="nav-item w-100">
-                    <form method="get" class="position-relative" action="{% url 'allcategory' %}">
+                    <form method="get" class="position-relative" action="{% url 'allquizes' %}">
                             {{ myFilter.form.name }}
                         <div class="d-flex justify-content-end">
                             <button class="bg-transparent p-2 position-absolute top-50 end-10 translate-middle-y border-0 text-primary-hover text-reset" type="submit">
