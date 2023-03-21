@@ -29,7 +29,7 @@
             <td><a href="{% url 'quiz' quiz.id %}">{{quiz.name}}</a></td>
             <td>{{quiz.added}}</td>
             <td>{{quiz.modified}}</td>
-            <td><a href="#">Edit</a></td>
+            <td><a href="{% url 'update_quiz' quiz.id %}">Edit</a></td>
             <td><a href="{% url 'quiz-delete' quiz.id %}">delete</a></td>
         </tr>
         {% endfor %}
