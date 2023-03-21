@@ -1,24 +1,31 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
+from random import shuffle
 
-from .models import Quiz, Question, Answer, Profile, User, Category, DoneQuizes, Type, Comment
+from .models import Quiz, Question, Answer, Profile, Category, DoneQuizes, Type, Comment
 from .filters import QuizFilter
-
 
 
 def quizView(request, pk):
     quiz = get_object_or_404(Quiz, id=pk)
-    questions = Question.objects.filter(quiz=quiz)
+    questions = list(Question.objects.filter(quiz=quiz))
     comments = Comment.objects.filter(quiz=quiz).order_by('-added')
+
+    shuffle(questions)
+
     quizes = Quiz.objects.all()
     myFilter = QuizFilter(request.GET, queryset=quizes)
     quizes = myFilter.qs
+
     if request.method == 'GET':
         context = {'quizes': quizes, 'myFilter': myFilter, "quiz": quiz, "questions": questions, 'done': False, 'comments': comments}
 
 
         if quiz.type == Type.objects.get(name='Checkbox'):
-            answers = [question.answer_set.all() for question in questions]
+            answers = [list(question.answer_set.all()) for question in questions]
+            for answer in answers:
+                shuffle(answer)
             context['answers'] = answers
             return render(request, 'quizes/quiztemplate.html', context)
 
@@ -31,12 +38,18 @@ def quizView(request, pk):
         max_points = 0
         data = request.POST
         user = request.user
+        profile = Profile.objects.get(user=user)
         levelup_flag = False
+
+        try:
+            best_score = DoneQuizes.objects.get(user=profile, quiz=quiz)
+        except:
+            best_score = None
 
         if data.get('comment'):
             Comment.objects.create(content=data.get('comment'),
                                    quiz=quiz,
-                                   author=Profile.objects.get(user=user))
+                                   author=profile)
             return redirect('quiz', pk=quiz.id)
 
         if quiz.type == Type.objects.get(name='Checkbox'):
@@ -101,23 +114,24 @@ def quizView(request, pk):
 
         answers = [question.answer_set.all() for question in questions]
         context = {'points': points, 'max_points': max_points, 'levelup_flag': levelup_flag, 'done': True,
-                   "quiz": quiz, "questions": questions, 'answers': answers, 'comments': comments}
+                   "quiz": quiz, "questions": questions, 'answers': answers, 'comments': comments,
+                   'best_score': best_score}
 
         return render(request, template_name, context)
 
 
 def home(request):
-    category = Category.objects.all()
-    users = Profile.objects.all().order_by('-level', '-progress').values()[:3]
-    quizes = Quiz.objects.all().order_by('-added').values()[:3]
+    users = Profile.objects.all().order_by('-level', '-progress')[:3]
+    quizes = Quiz.objects.all().order_by('-added')[:3]
     myFilter = QuizFilter(request.GET, queryset=quizes)
     quizes = myFilter.qs
-    context = {'users': users, 'quizes': quizes, 'category': category, 'myFilter': myFilter}
+
+    context = {'users': users, 'quizes': quizes, 'myFilter': myFilter}
     return render(request, 'quizes/home.html', context)
 
 
 def users(request):
-    users = User.objects.all()
+    users = Profile.objects.all().order_by('-level', '-progress')
     context = {'users': users}
     return render(request, 'quizes/users.html', context)
 
@@ -152,9 +166,16 @@ def allcategory(request):
     return render(request, 'quizes/all_category.html', context)
 
 
-
+@login_required
 def update_quiz(request, pk):
     quiz = Quiz.objects.get(id=pk)
+
+    user = request.user
+    profile = Profile.objects.get(user=user)
+
+    if profile != quiz.author:
+        return redirect('home')
+
     questions = Quiz.objects.get(id=pk).question_set.all()
     categories = Category.objects.all()
     levels = (1, 2, 3, 4, 5, 6)
@@ -194,6 +215,7 @@ def categoryView(request, pk):
     return render(request, 'quizes/category.html', context)
 
 
+@login_required
 def createquizView(request, pk):
     categories = Category.objects.all()
     type = get_object_or_404(Type, id=pk)
@@ -203,6 +225,8 @@ def createquizView(request, pk):
     levels = (1, 2, 3, 4, 5, 6)
     user = request.user
     profil = Profile.objects.get(user=user)
+    if profile.level < 5:
+        return render(request, 'quizes/too_small_lvl.html', {})
     if request.method == "GET":
         context = {'quizes': quizes, 'myFilter': myFilter, 'categories': categories, 'levels': levels, 'done': False}
         if type.name == 'Checkbox':
@@ -250,6 +274,7 @@ def createquizView(request, pk):
                 return render(request, 'quizes/create_quiz.html', {'done': True})
 
 
+@login_required
 def acountDetails(request):
     user = request.user
     profile = get_object_or_404(Profile, user=user)

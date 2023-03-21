@@ -6,16 +6,18 @@
   <thead>
     <tr>
       <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
+      <th scope="col">Name</th>
+      <th scope="col">Level</th>
+      <th scope="col">Progress</th>
     </tr>
   </thead>
   <tbody>
      {% for i in users %}
          <tr>
-            <td>{{ i.username }}</td>
-            <td>{{ i.email }}</td>
+            <td>{{forloop.counter}}</td>
+            <td>{{ i.name }}</td>
+            <td>{{ i.level }}</td>
+            <td>{{ i.progress }}</td>
          </tr>
      {% endfor %}
   </tbody>

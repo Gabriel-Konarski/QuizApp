@@ -38,7 +38,11 @@
                     <h6 class="card-subtitle mb-2">Congratulations, you earned next level!</h6>
                 {% endif %}
                 <h6 class="card-subtitle mb-2">Your score is {{points}}/{{max_points}}</h6>
-                <p class="card-text"> !Your best score is x/x!</p>
+
+                {% if best_score %}
+                <p class="card-text"> Your best score is {{best_score.points}}/{{max_points}}</p>
+                {% endif %}
+
                 {% if points == max_points %}
                     <p class="card-text"> This is max score! :)</p>
                 {% endif %}
@@ -64,15 +68,15 @@
                 </tr>
             {% endfor %}
         </table>
-        <input type="submit" class="btn btn-primary">
-
         </div>
 
         <h3>Comments</h3>
 
         {% if user.is_authenticated %}
-            <input type="text" name="comment" placeholder="Write your comment here" required>
-            <input type="submit" class="btn btn-primary">
+            <form method="POST" action=""> {% csrf_token %}
+                <input type="text" name="comment" placeholder="Write your comment here" required>
+                <input type="submit" class="btn btn-primary">
+            </form>
         {% endif %}
 
         {% if comments|length > 0 %}
