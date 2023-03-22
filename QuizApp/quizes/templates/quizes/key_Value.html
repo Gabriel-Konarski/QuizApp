@@ -19,7 +19,9 @@
         </div>
         <div class="col-sm-4">
             <div class="input-group mb-3">
+
                 <label class="input-group-text">Quiz name</label>
+
                 <input class="form-control" type="text" name="quiz-name" placeholder="Add quiz name">
             </div>
         </div>
@@ -44,11 +46,13 @@
             <h5>Questions and answers</h5>
         {% for i in '12345' %}
         <div class="input-group mt-3 mb-3">
+
             <label class="input-group-text">Question {{ i }}</label>
             <input class="form-control" type="text" name="quiz-question-{{ i }}" placeholder="Add question {{ i }}">
         </div>
         <div class="input-group mb-3">
             <label class="input-group-text">Answer {{ i }}</label>
+
             <input class="form-control" type="text" name="quiz-answer-{{ i }}" placeholder="Add answer {{ i }}">
         </div>
         {% endfor %}
