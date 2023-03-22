@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load django_bootstrap5 %}
 
+{% block title %}Update {{ quiz.name }}{% endblock %}
+
 {% block content %}
 
 <form action="" method="POST">{% csrf_token %}
