@@ -253,14 +253,13 @@ def createquizView(request, pk):
             quizname = request.POST['quiz-name']
         except:
             quizname = None
-        if quizname:
+        if quizname is not None:
             category = Category.objects.get(name=request.POST['quiz-category'])
             quiz = Quiz.objects.create(author=profil, category=category,
                                     type=type,
                                     name=request.POST['quiz-name'],
                                     description=request.POST['quiz-description'],
                                     level=request.POST['quiz-level'])
-
 
         if type.name == 'KeyValue':
 
@@ -270,7 +269,7 @@ def createquizView(request, pk):
 
                 question = Question.objects.create(quiz=quiz, content=question_content)
                 answer = Answer.objects.create(question=question, name=answer_name, correct=True)
-                return redirect('home')
+            return redirect('home')
         else:
             if quizname:
                 question = Question.objects.create(quiz=quiz, content=request.POST['question'])
@@ -285,7 +284,7 @@ def createquizView(request, pk):
             if len(Question.objects.filter(quiz=quiz)) == 5:
                 return redirect('home')
             else:
-                return render(request, 'quizes/create_quiz.html', {'done': True})
+                return render(request, 'quizes/create_quiz.html', {'quizes': quizes, 'myFilter': myFilter, 'done': True})
 
 
 @login_required
@@ -296,6 +295,10 @@ def acountDetails(request):
     created_quizes = Quiz.objects.filter(author=profile)
     history_quizes = DoneQuizes.objects.filter(user=profile).order_by('date_completed')
 
-    context = {'user': user, 'profile': profile, 'created_quizes': created_quizes, 'history_quizes': history_quizes}
+    quizes = Quiz.objects.all()
+    myFilter = QuizFilter(request.GET, queryset=quizes)
+    quizes = myFilter.qs
+
+    context = {'quizes': quizes, 'myFilter': myFilter, 'user': user, 'profile': profile, 'created_quizes': created_quizes, 'history_quizes': history_quizes}
     return render(request, 'quizes/account.html', context)
 

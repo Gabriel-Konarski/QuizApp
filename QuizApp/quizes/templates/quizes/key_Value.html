@@ -4,11 +4,12 @@
 {% block title %}Create quizz{% endblock %}
 
 {% block content %}
+<h1>Create quiz KeyValue</h1>
 <form action="" method="POST">{% csrf_token %}
-    <div class="row">
-        <div class="col-sm-6">
+    <div class="row justify-content-center mt-5">
+        <div class="col-sm-4">
             <div class="input-group mb-3">
-                <label class="input-group-text" for="quiz-category">Category</label>
+                <label class="input-group-text">Category</label>
                 <select class="form-select" name="quiz-category">
                     {% for category in categories %}
                         <option value="{{ category }}">{{ category }}</option>
@@ -16,23 +17,46 @@
                 </select>
             </div>
         </div>
-        <input type="text" name="quiz-name" placeholder="Quiz name">
-        <textarea name="quiz-description"></textarea>
+        <div class="col-sm-4">
+            <div class="input-group mb-3">
+                <label class="input-group-text">Quiz name</label>
+                <input class="form-control" type="text" name="quiz-name" placeholder="Add quiz name">
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="input-group">
+                <span class="input-group-text">Quiz description</span>
+                <textarea class="form-control" name="quiz-description" aria-label="Quiz description"></textarea>
+            </div>
+        </div>
 
+        <div class="col-sm-8 mt-4">
+            <h5>Select quiz difficulty level</h5>
         {% for level in levels %}
-            <input type="radio" name="quiz-level" value="{{ level }}" placeholder="Quiz-level">
-            <label>{{ level }}</label>
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="quiz-level" id="quiz-level-{{ level }}" value="{{ level }}">
+            <label class="form-check-label" for="quiz-level-{{ level }}">{{ level }}</label>
+        </div>
         {% endfor %}
+        </div>
 
+        <div class="col-sm-8 mt-4">
+            <h5>Questions and answers</h5>
         {% for i in '12345' %}
-            <input type="text" name="question{{ i }}" placeholder="Question">
-            <p>
-                <input type="text" name="answer{{ i }}" placeholder="Answer">
-            </p>
+        <div class="input-group mt-3 mb-3">
+            <label class="input-group-text">Question {{ i }}</label>
+            <input class="form-control" type="text" name="quiz-question-{{ i }}" placeholder="Add question {{ i }}">
+        </div>
+        <div class="input-group mb-3">
+            <label class="input-group-text">Answer {{ i }}</label>
+            <input class="form-control" type="text" name="quiz-answer-{{ i }}" placeholder="Add answer {{ i }}">
+        </div>
         {% endfor %}
+        </div>
 
-        <div class="col-12">
+        <div class="col-8">
             <input type="submit" Name="Submit" class="btn btn-primary mt-4">
         </div>
+    </div>
 </form>
 {% endblock %}
