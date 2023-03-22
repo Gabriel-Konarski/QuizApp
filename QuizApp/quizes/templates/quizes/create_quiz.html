@@ -11,7 +11,9 @@
     <div class="row justify-content-center mt-5">
         <div class="col-sm-4">
             <div class="input-group mb-3">
-                <label class="input-group-text" for="quiz-category">Category</label>
+
+                <label class="input-group-text">Category</label>
+
                 <select class="form-select" name="quiz-category">
                     {% for category in categories %}
                         <option value="{{ category }}">{{ category }}</option>
@@ -21,7 +23,8 @@
         </div>
         <div class="col-sm-4">
             <div class="input-group mb-3">
-                <label class="input-group-text" for="quiz-name">Quiz name</label>
+
+                <label class="input-group-text">Quiz name</label>
                 <input class="form-control" type="text" name="quiz-name" placeholder="Add quiz name">
             </div>
         </div>
@@ -45,7 +48,11 @@
         <div class="col-sm-8 mt-4">
             <h5>Questions and answers</h5>
             <div class="input-group mt-3 mb-3">
+
+                <label class="input-group-text">Question</label>
+
                 <label class="input-group-text" for="quiz-question">Question</label>
+
                 <input class="form-control" type="text" name="quiz-question" placeholder="Add question">
             </div>
             <div class="input-group mb-3">
